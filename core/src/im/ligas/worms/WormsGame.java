@@ -35,7 +35,7 @@ public class WormsGame extends ApplicationAdapter {
 	private short wormsCount;
 
 	private int shapeRendererSize = 1;
-	private boolean gameOver= false;
+	private boolean gameOver = false;
 
 
 	@Override
@@ -80,7 +80,12 @@ public class WormsGame extends ApplicationAdapter {
 
 		short dead = 0;
 		for (int i = 0; i < worms.size; i++) {
-			if (worms.get(i).isDead()) {
+			Worm worm = worms.get(i);
+			if (worm.isDead() ||
+				wallCollision(worm) ||
+				selfCollision(worm) ||
+				opponentCollision(worm, i, worms)
+				) {
 				dead++;
 			}
 		}
@@ -101,6 +106,32 @@ public class WormsGame extends ApplicationAdapter {
 			printDebugData(worm);
 		}
 
+	}
+
+	private boolean opponentCollision(Worm worm, int currentWorm, Array<Worm> worms) {
+		boolean dead = false;
+		for (int i = 0; i < this.worms.size; i++) {
+			if (i != currentWorm) {
+				Array<Float> opponentBody = this.worms.get(i).getBody();
+				dead = Utils.checkOpponentCollisions(worm.getHead(), opponentBody);
+			}
+			if(dead){
+				worm.setDead(dead);
+				break;
+			}
+		}
+		return  worm.isDead();
+	}
+
+	private boolean selfCollision(Worm worm) {
+		worm.setDead(Utils.checkSelfCollisions(worm.getHead(), worm.getBody()));
+		return worm.isDead();
+	}
+
+	private boolean wallCollision(Worm worm) {
+		Vector2 head = worm.getHead();
+		worm.setDead(head.x < 0 || head.x > WormsGame.DIMENSION_X || head.y < 0 || head.y > WormsGame.DIMENSION_Y);
+		return worm.isDead();
 	}
 
 
@@ -125,6 +156,14 @@ public class WormsGame extends ApplicationAdapter {
 	}
 
 	private void gameOver() {
+		Worm winner;
+		for (Worm worm : worms) {
+			if(!worm.isDead()){
+				winner = worm;
+				break;
+			}
+		}
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.setColor(Color.RED);
 

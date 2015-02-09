@@ -39,6 +39,14 @@ public class Worm {
 		return inputKeyRight;
 	}
 
+	public Vector2 getHead() {
+		return head;
+	}
+
+	public Array<Float> getBody() {
+		return body;
+	}
+
 	public int turnLeft() {
 		changedDirection = true;
 		return heading += 1;
@@ -62,14 +70,16 @@ public class Worm {
 				body.set(body.size - 1, head.y);
 			}
 			changedDirection = false;
-			this.dead = Utils.checkSelfCollisions(head, body);
+		}
+	}
+
+	public void setDead(boolean dead) {
+		if(!this.dead){
+			this.dead = dead;
 		}
 	}
 
 	public boolean isDead() {
-		if (!dead) {
-			dead = head.x < 0 || head.x > WormsGame.DIMENSION_X || head.y < 0 || head.y > WormsGame.DIMENSION_Y;
-		}
 		return dead;
 	}
 
