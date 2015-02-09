@@ -62,7 +62,7 @@ public class Worm {
 				body.set(body.size - 1, head.y);
 			}
 			changedDirection = false;
-			this.dead = Utils.checkSelfCollisions(body);
+			this.dead = Utils.checkSelfCollisions(head, body);
 		}
 	}
 
