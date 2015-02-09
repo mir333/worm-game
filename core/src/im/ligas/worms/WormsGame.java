@@ -32,9 +32,10 @@ public class WormsGame extends ApplicationAdapter {
 	private ShapeRenderer shapeRenderer;
 
 	private Array<Worm> worms;
+	private short wormsCount;
 
 	private int shapeRendererSize = 1;
-	private int gameOverCounter;
+	private boolean gameOver= false;
 
 
 	@Override
@@ -50,8 +51,9 @@ public class WormsGame extends ApplicationAdapter {
 //		worms.add(new Worm(startPositions.pop(), Color.YELLOW, Input.Keys.J, Input.Keys.L));
 //		worms.add(new Worm(startPositions.pop(), Color.BLUE, Input.Keys.Z, Input.Keys.C));
 
+		wormsCount = (short) worms.size;
+
 		shapeRenderer = new ShapeRenderer(INIT_SIZE);
-		gameOverCounter = worms.size;
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class WormsGame extends ApplicationAdapter {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 
-		if (gameOverCounter < 1) {
+		if (gameOver) {
 			gameOver();
 			return;
 		}
@@ -76,11 +78,13 @@ public class WormsGame extends ApplicationAdapter {
 			autoExtendLine(worm);
 		}
 
+		short dead = 0;
 		for (int i = 0; i < worms.size; i++) {
-			if(worms.get(i).isDead()){
-				gameOverCounter--;
+			if (worms.get(i).isDead()) {
+				dead++;
 			}
 		}
+		gameOver = (wormsCount - dead) < 2;
 
 
 		for (Worm worm : worms) {
