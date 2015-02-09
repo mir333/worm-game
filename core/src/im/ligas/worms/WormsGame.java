@@ -80,7 +80,7 @@ public class WormsGame extends ApplicationAdapter {
 			if(worms.get(i).isDead()){
 				gameOverCounter--;
 			}
-c		}
+		}
 
 
 		for (Worm worm : worms) {
