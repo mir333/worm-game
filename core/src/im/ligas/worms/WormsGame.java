@@ -46,10 +46,10 @@ public class WormsGame extends ApplicationAdapter {
 		camera.setToOrtho(false, DIMENSION_X, DIMENSION_Y);
 
 		worms = new Array<Worm>(4);
-		worms.add(new Worm(startPositions.pop(), Color.RED, Input.Keys.LEFT, Input.Keys.RIGHT));
-		worms.add(new Worm(startPositions.pop(), Color.GREEN, Input.Keys.Q, Input.Keys.E));
-//		worms.add(new Worm(startPositions.pop(), Color.YELLOW, Input.Keys.J, Input.Keys.L));
-//		worms.add(new Worm(startPositions.pop(), Color.BLUE, Input.Keys.Z, Input.Keys.C));
+		worms.add(new Worm(startPositions.pop(), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
+		worms.add(new Worm(startPositions.pop(), Color.GREEN, "Green worm", Input.Keys.Q, Input.Keys.E));
+//		worms.add(new Worm(startPositions.pop(), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
+//		worms.add(new Worm(startPositions.pop(), Color.BLUE,"Blue worm", Input.Keys.Z, Input.Keys.C));
 
 		wormsCount = (short) worms.size;
 
@@ -142,7 +142,7 @@ public class WormsGame extends ApplicationAdapter {
 	private void printDebugData(Worm worm) {
 		batch.begin();
 		font.setColor(Color.GREEN);
-		font.drawMultiLine(batch, worm.toString(), 100, 250);
+		font.drawMultiLine(batch, worm.toDebugString(), 100, 250);
 		font.draw(batch, "Mem Native Heap " + Gdx.app.getNativeHeap() / 1048576 + "MB", 100, 140);
 		font.draw(batch, "Mem Java Heap= " + Gdx.app.getJavaHeap() / 1048576 + "MB", 100, 120);
 		batch.end();
@@ -156,9 +156,9 @@ public class WormsGame extends ApplicationAdapter {
 	}
 
 	private void gameOver() {
-		Worm winner;
+		Worm winner = null;
 		for (Worm worm : worms) {
-			if(!worm.isDead()){
+			if (!worm.isDead()) {
 				winner = worm;
 				break;
 			}
@@ -169,7 +169,8 @@ public class WormsGame extends ApplicationAdapter {
 
 		batch.begin();
 		font.draw(batch, "GAME OVER", CENTER.x - 100, CENTER.y);
-		font.setScale(3);
+		font.draw(batch, "THE WINNER IS: " + winner, CENTER.x - 100, CENTER.y - 100);
+		font.setScale(2);
 		font.setColor(Color.RED);
 		batch.end();
 	}

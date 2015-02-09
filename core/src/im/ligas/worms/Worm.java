@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
  * Created by ligasm on 2/8/15.
  */
 public class Worm {
+	private final String name;
 	private Vector2 head;
 	private Array<Float> body;
 	private int heading;
@@ -20,7 +21,7 @@ public class Worm {
 	private boolean dead = false;
 	private Color color;
 
-	public Worm(Vector2 start, Color color, int inputKeyLeft, int inputKeyRight) {
+	public Worm(Vector2 start, Color color, String name,int inputKeyLeft, int inputKeyRight) {
 		body = new Array<Float>(WormsGame.INIT_SIZE);
 		body.add(start.x);
 		body.add(start.y);
@@ -29,6 +30,7 @@ public class Worm {
 		this.inputKeyLeft = inputKeyLeft;
 		this.inputKeyRight = inputKeyRight;
 		this.color = color;
+		this.name = name;
 	}
 
 	public int getInputKeyLeft() {
@@ -91,7 +93,11 @@ public class Worm {
 	}
 
 	@Override
-	public String toString() {
+	public String toString(){
+		return name;
+	}
+
+	public String toDebugString() {
 		return "Heading is = " + heading
 			+ "\nX = " + head.x
 			+ "\nY = " + head.y
