@@ -11,35 +11,64 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package im.ligas.worms;
+package im.ligas.worms.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import im.ligas.worms.screens.MainMenuScreen;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import im.ligas.worms.WormsConstants;
+import im.ligas.worms.WormsGame;
 
 /**
  * @author Miroslav Ligas
  */
-public class WormsGame extends Game {
-	public SpriteBatch batch;
-	public BitmapFont font;
+public class BaseScreen<T>  implements Screen {
+
+	final T game;
+
+	OrthographicCamera camera;
+
+	public BaseScreen(T game) {
+		this.game = game;
+		camera = new OrthographicCamera();
+
+		camera.setToOrtho(false, WormsConstants.DIMENSION_X, WormsConstants.DIMENSION_Y);
+
+
+	}
+
 
 	@Override
-	public void create() {
-		batch = new SpriteBatch();
-		font = new BitmapFont();
-		this.setScreen(new MainMenuScreen(this));
+	public void show() {
+
 	}
 
 	@Override
-	public void render() {
-		super.render();
+	public void render(float delta) {
+
+	}
+
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void hide() {
+
 	}
 
 	@Override
 	public void dispose() {
-		batch.dispose();
-		font.dispose();
+
 	}
 }

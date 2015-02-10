@@ -22,7 +22,7 @@ public class Worm {
 	private Color color;
 
 	public Worm(Vector2 start, Color color, String name,int inputKeyLeft, int inputKeyRight) {
-		body = new Array<Float>(WormsGame.INIT_SIZE);
+		body = new Array<Float>(WormsConstants.INIT_SIZE);
 		body.add(start.x);
 		body.add(start.y);
 		this.head = start;
@@ -105,6 +105,6 @@ public class Worm {
 	}
 
 	public void extend() {
-		body.ensureCapacity(WormsGame.INIT_SIZE);
+		body.ensureCapacity(WormsConstants.INIT_SIZE);
 	}
 }

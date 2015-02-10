@@ -13,4 +13,19 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new WormsGame(), config);
 	}
+
+	@Override
+	public void runOnUiThread(Runnable runnable) {
+
+	}
+
+	@Override
+	public void startActivity(android.content.Intent intent) {
+
+	}
+
+	@Override
+	public android.view.WindowManager getWindowManager() {
+		return null;
+	}
 }

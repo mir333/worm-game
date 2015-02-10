@@ -13,33 +13,17 @@
  */
 package im.ligas.worms;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import im.ligas.worms.screens.MainMenuScreen;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * @author Miroslav Ligas
  */
-public class WormsGame extends Game {
-	public SpriteBatch batch;
-	public BitmapFont font;
+public class WormsConstants {
 
-	@Override
-	public void create() {
-		batch = new SpriteBatch();
-		font = new BitmapFont();
-		this.setScreen(new MainMenuScreen(this));
-	}
-
-	@Override
-	public void render() {
-		super.render();
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
-		font.dispose();
-	}
+	public static final int GROW_FACTOR = 20;
+	public static final int DIMENSION_X = 1024;
+	public static final int DIMENSION_Y = 600;
+	public static final Vector2 CENTER = new Vector2((DIMENSION_X / 2), (DIMENSION_Y / 2));
+	public static final int INIT_SIZE = 10000;
+	public static final float WORM_HEAD_SIZE = 0.01f;
 }

@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Array;
 public class Utils {
 
 	public static float calculateStartAngle(Vector2 start) {
-		float x = start.x - WormsGame.CENTER.x;
-		float y = start.y - WormsGame.CENTER.y;
+		float x = start.x - WormsConstants.CENTER.x;
+		float y = start.y - WormsConstants.CENTER.y;
 		float radius = MathUtils.atan2(x, y);
 		float degrees = radius * MathUtils.radiansToDegrees;
 		if ((x < 0 && y > 0) || (x > 0 && y < 0)) {
@@ -49,7 +49,7 @@ public class Utils {
 			if (self && samePoint(end, head)) {
 				continue;
 			}
-			if (Intersector.intersectSegmentCircle(start, end, head, 1)) {
+			if (Intersector.intersectSegmentCircle(start, end, head, WormsConstants.WORM_HEAD_SIZE)) {
 				return true;
 			}
 
@@ -59,6 +59,7 @@ public class Utils {
 	}
 
 	private static boolean samePoint(Vector2 end, Vector2 head) {
-		return MathUtils.isEqual(end.x, head.x, 1.5f) && MathUtils.isEqual(end.y, head.y, 1.5f);
+		return MathUtils.isEqual(end.x, head.x, WormsConstants.WORM_HEAD_SIZE*10)
+			&& MathUtils.isEqual(end.y, head.y, WormsConstants.WORM_HEAD_SIZE*10);
 	}
 }
