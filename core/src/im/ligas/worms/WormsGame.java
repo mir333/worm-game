@@ -14,6 +14,8 @@
 package im.ligas.worms;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import im.ligas.worms.screens.MainMenuScreen;
@@ -34,6 +36,10 @@ public class WormsGame extends Game {
 
 	@Override
 	public void render() {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glLineWidth(3);
+
 		super.render();
 	}
 
