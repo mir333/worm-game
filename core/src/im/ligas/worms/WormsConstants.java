@@ -25,5 +25,5 @@ public class WormsConstants {
 	public static final int DIMENSION_Y = 600;
 	public static final Vector2 CENTER = new Vector2((DIMENSION_X / 2), (DIMENSION_Y / 2));
 	public static final int INIT_SIZE = 10000;
-	public static final float WORM_HEAD_SIZE = 0.01f;
+	public static final float COLLISION_DISTANCE = 0.5f;
 }
