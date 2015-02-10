@@ -16,7 +16,7 @@ import static im.ligas.worms.WormsConstants.*;
 
 public class WormsScene extends BaseScreen<WormsGame> {
 
-	private static final Array<Vector2> startPositions = new Array<Vector2>(8) {{
+	private static final Array<Vector2> START_POSITIONS = new Array<Vector2>(8) {{
 		add(new Vector2(CENTER.x - 100, CENTER.y - 100));
 		add(new Vector2(CENTER.x + 100, CENTER.y + 100));
 		add(new Vector2(CENTER.x - 100, CENTER.y + 100));
@@ -28,21 +28,24 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	private Array<Worm> worms;
 	private short wormsCount;
 
-	private int shapeRendererSize = 1;
-	private boolean gameOver = false;
+	private int shapeRendererSize;
+	private boolean gameOver;
 
 	public WormsScene(WormsGame game) {
 		super(game);
 
 		worms = new Array<Worm>(4);
-		worms.add(new Worm(startPositions.get(0), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
-		worms.add(new Worm(startPositions.get(1), Color.GREEN, "Green worm", Input.Keys.Q, Input.Keys.E));
-		worms.add(new Worm(startPositions.get(2), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
-		worms.add(new Worm(startPositions.get(3), Color.BLUE,"Blue worm", Input.Keys.Z, Input.Keys.C));
+		worms.add(new Worm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
+		worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.GREEN, "Green worm", Input.Keys.Q, Input.Keys.E));
+		//worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
+		//worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.BLUE,"Blue worm", Input.Keys.Z, Input.Keys.C));
 
 		wormsCount = (short) worms.size;
 
 		shapeRenderer = new ShapeRenderer(INIT_SIZE);
+
+		shapeRendererSize = 1;
+		gameOver = false;
 	}
 
 	@Override
@@ -145,16 +148,6 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		sr.setColor(Color.CYAN);
 		sr.circle(CENTER.x, CENTER.y, 5);
 		sr.end();*/
-
-		ShapeRenderer sr = new ShapeRenderer();
-		sr.setProjectionMatrix(camera.combined);
-		sr.begin(ShapeRenderer.ShapeType.Line);
-		sr.setColor(Color.CYAN);
-		for (int i = 0; i < worms.size; i++) {
-			Vector2 head = worms.get(i).getHead();
-			sr.circle(head.x,head.y, WormsConstants.WORM_HEAD_SIZE);
-		}
-		sr.end();
 	}
 
 	private void gameOver() {
