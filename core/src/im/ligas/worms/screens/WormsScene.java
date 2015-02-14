@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import im.ligas.worms.GameSettings;
 import im.ligas.worms.Utils;
 import im.ligas.worms.Worm;
 import im.ligas.worms.WormsGame;
@@ -50,11 +51,20 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	public WormsScene(WormsGame game) {
 		super(game);
 
-		worms = new Array<Worm>(4);
-		worms.add(new Worm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
-		worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.GREEN, "Green worm", Input.Keys.Q, Input.Keys.E));
-		//worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
-		//worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.BLUE,"Blue worm", Input.Keys.Z, Input.Keys.C));
+		int numberOfWorms = game.gameSettings.getNumberOfWorms();
+		worms = new Array<Worm>(numberOfWorms);
+
+		switch (numberOfWorms){
+			case 4:
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.GREEN,"Blue worm", Input.Keys.Z, Input.Keys.C));
+			case 3:
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
+			case 2:
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Green worm", Input.Keys.Q, Input.Keys.E));
+			case 1:
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
+			default:break;
+		}
 
 		wormsCount = (short) worms.size;
 

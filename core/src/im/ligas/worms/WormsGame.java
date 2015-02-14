@@ -31,11 +31,13 @@ import im.ligas.worms.screens.MainMenuScreen;
 public class WormsGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public GameSettings gameSettings;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		gameSettings = new GameSettings(2);
 		this.setScreen(new MainMenuScreen(this));
 	}
 

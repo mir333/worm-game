@@ -124,6 +124,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 				player4.setColor(1, 1, 1, 1);
 				numberOfWorms = 4;
 			} else if (startRec.contains(unprojectPosition.x, unprojectPosition.y)) {
+				game.gameSettings.setNumberOfWorms(numberOfWorms);
 				game.setScreen(new WormsScene(game));
 				dispose();
 			} else if (quitRec.contains(unprojectPosition.x, unprojectPosition.y)) {
