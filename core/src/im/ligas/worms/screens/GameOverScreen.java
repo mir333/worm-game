@@ -30,12 +30,18 @@ import static im.ligas.worms.WormsConstants.CENTER;
  */
 public class GameOverScreen extends BaseScreen<WormsGame> {
 
-
 	private final Worm winner;
 
 	public GameOverScreen(WormsGame game, Worm winner) {
 		super(game);
 		this.winner = winner;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		game.setScreen(new MainMenuScreen(game));
+		dispose();
+		return false;
 	}
 
 	@Override
@@ -49,10 +55,5 @@ public class GameOverScreen extends BaseScreen<WormsGame> {
 		game.font.draw(game.batch, "GAME OVER", CENTER.x - 100, CENTER.y);
 		game.font.draw(game.batch, "THE WINNER IS: " + winner, CENTER.x - 100, CENTER.y - 100);
 		game.batch.end();
-
-		if (Gdx.input.isTouched()) {
-			game.setScreen(new WormsScene(game));
-			dispose();
-		}
 	}
 }

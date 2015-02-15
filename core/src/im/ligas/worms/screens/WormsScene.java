@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import im.ligas.worms.GameSettings;
 import im.ligas.worms.Utils;
 import im.ligas.worms.Worm;
 import im.ligas.worms.WormsGame;
@@ -54,16 +53,17 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		int numberOfWorms = game.gameSettings.getNumberOfWorms();
 		worms = new Array<Worm>(numberOfWorms);
 
-		switch (numberOfWorms){
+		switch (numberOfWorms) {
 			case 4:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.GREEN,"Blue worm", Input.Keys.Z, Input.Keys.C));
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Input.Keys.Z, Input.Keys.C));
 			case 3:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW,"Yellow worm", Input.Keys.J, Input.Keys.L));
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Input.Keys.J, Input.Keys.L));
 			case 2:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Green worm", Input.Keys.Q, Input.Keys.E));
+				worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Input.Keys.Q, Input.Keys.E));
 			case 1:
 				worms.add(new Worm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
-			default:break;
+			default:
+				break;
 		}
 
 		wormsCount = (short) worms.size;
@@ -75,6 +75,18 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 	@Override
+	public boolean keyDown(int keycode) {
+		turnWorms(keycode, true);
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		turnWorms(keycode, false);
+		return false;
+	}
+
+	@Override
 	public void render(float delta) {
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -83,9 +95,6 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		if (gameOver) {
 			gameOver();
 			return;
-		}
-		for (Worm worm : worms) {
-			handleInput(worm);
 		}
 
 		for (Worm worm : worms) {
@@ -117,10 +126,14 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			}
 		}
 
-		printDebugData(worms);
-
-
+//		printDebugData(worms);
 	}
+
+	@Override
+	public void dispose() {
+		shapeRenderer.dispose();
+	}
+
 
 	private boolean opponentCollision(Worm worm, int currentWorm, Array<Worm> worms) {
 		boolean dead = false;
@@ -163,13 +176,6 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		game.font.draw(game.batch, "Mem Native Heap " + Gdx.app.getNativeHeap() / 1048576 + "MB", 100, 140);
 		game.font.draw(game.batch, "Mem Java Heap= " + Gdx.app.getJavaHeap() / 1048576 + "MB", 100, 120);
 		game.batch.end();
-
-/*		ShapeRenderer sr = new ShapeRenderer();
-		sr.setProjectionMatrix(camera.combined);
-		sr.begin(ShapeRenderer.ShapeType.Line);
-		sr.setColor(Color.CYAN);
-		sr.circle(CENTER.x, CENTER.y, 5);
-		sr.end();*/
 	}
 
 	private void gameOver() {
@@ -183,23 +189,18 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 		game.setScreen(new GameOverScreen(game, winner));
 		dispose();
-
-
 	}
 
-
-	private void handleInput(Worm worm) {
-		if (Gdx.input.isKeyPressed(worm.getInputKeyLeft())) {
-			worm.turnLeft();
+	private void turnWorms(int keycode, boolean startEnd) {
+		for (Worm worm : worms) {
+			if (keycode == worm.getInputKeyLeft()) {
+				worm.turnLeft(startEnd);
+			}
+			if (keycode == worm.getInputKeyRight()) {
+				worm.turnRight(startEnd);
+			}
 		}
 
-		if (Gdx.input.isKeyPressed(worm.getInputKeyRight())) {
-			worm.turnRight();
-		}
 	}
 
-	@Override
-	public void dispose() {
-		shapeRenderer.dispose();
-	}
 }

@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import im.ligas.worms.GameSettings;
 import im.ligas.worms.WormsGame;
 
 import static im.ligas.worms.WormsConstants.CENTER;
@@ -35,12 +34,12 @@ import static im.ligas.worms.WormsConstants.CENTER;
 public class MainMenuScreen extends BaseScreen<WormsGame> {
 	private final Vector3 touchPosition;
 	private Texture menuTexture;
-	private Sprite quit;
-	private Sprite start;
-	private Sprite player1;
-	private Sprite player2;
-	private Sprite player3;
-	private Sprite player4;
+	private final Sprite quit;
+	private final Sprite start;
+	private final Sprite player1;
+	private final Sprite player2;
+	private final Sprite player3;
+	private final Sprite player4;
 	private final Rectangle startRec;
 
 	private final Rectangle quitRec;
@@ -48,8 +47,6 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 	private final Rectangle player2Rec;
 	private final Rectangle player3Rec;
 	private final Rectangle player4Rec;
-
-	private int numberOfWorms;
 
 	public MainMenuScreen(final WormsGame game) {
 		super(game);
@@ -65,25 +62,52 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 
 		player1 = new Sprite(menuTexture, 0, 0, 96, 96);
 		player1.setPosition(CENTER.x - 200, CENTER.y - 0);
-		player1.setColor(1, 1, 1, 0.2f);
 		player1Rec = new Rectangle(CENTER.x - 200, CENTER.y - 0, 96, 96);
 
 		player2 = new Sprite(menuTexture, 96, 0, 96, 96);
 		player2.setPosition(CENTER.x - 100, CENTER.y - 0);
-		numberOfWorms = 2;
 		player2Rec = new Rectangle(CENTER.x - 100, CENTER.y - 0, 96, 96);
 
 		player3 = new Sprite(menuTexture, 192, 0, 96, 96);
 		player3.setPosition(CENTER.x, CENTER.y - 0);
-		player3.setColor(1, 1, 1, 0.2f);
 		player3Rec = new Rectangle(CENTER.x, CENTER.y - 0, 96, 96);
 
 		player4 = new Sprite(menuTexture, 288, 0, 96, 96);
 		player4.setPosition(CENTER.x + 100, CENTER.y - 0);
-		player4.setColor(1, 1, 1, 0.2f);
 		player4Rec = new Rectangle(CENTER.x + 100, CENTER.y - 0, 96, 96);
 
 		touchPosition = new Vector3();
+
+		clearPlayers();
+		selectPlayerButton(game.gameSettings.getNumberOfWorms());
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		touchPosition.x = screenX;
+		touchPosition.y = screenY;
+		touchPosition.z = 0;
+		Vector3 unprojectPosition = camera.unproject(touchPosition);
+		clearPlayers();
+		int numberOfWorms = 2;
+		if (player1Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			numberOfWorms = 1;
+		} else if (player2Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			numberOfWorms = 2;
+		} else if (player3Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			numberOfWorms = 3;
+		} else if (player4Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			numberOfWorms = 4;
+		} else if (startRec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			game.setScreen(new WormsScene(game));
+			dispose();
+		} else if (quitRec.contains(unprojectPosition.x, unprojectPosition.y)) {
+			dispose();
+			System.exit(0);
+		}
+		selectPlayerButton(numberOfWorms);
+		game.gameSettings.setNumberOfWorms(numberOfWorms);
+		return false;
 	}
 
 	@Override
@@ -104,35 +128,31 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		player3.draw(game.batch);
 		player4.draw(game.batch);
 		game.batch.end();
+	}
 
-		if (Gdx.input.isTouched()) {
-			touchPosition.x = Gdx.input.getX();
-			touchPosition.y = Gdx.input.getY();
-			touchPosition.z = 0;
-			Vector3 unprojectPosition = camera.unproject(touchPosition);
-			clearPlayers();
-			if (player1Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+	@Override
+	public void dispose() {
+		super.dispose();
+		menuTexture.dispose();
+	}
+
+	private void selectPlayerButton(int numberOfWorms) {
+		switch (numberOfWorms) {
+			case 1:
 				player1.setColor(1, 1, 1, 1);
-				numberOfWorms = 1;
-			} else if (player2Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+				break;
+			case 2:
 				player2.setColor(1, 1, 1, 1);
-				numberOfWorms = 2;
-			} else if (player3Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+				break;
+			case 3:
 				player3.setColor(1, 1, 1, 1);
-				numberOfWorms = 3;
-			} else if (player4Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
+				break;
+			case 4:
 				player4.setColor(1, 1, 1, 1);
-				numberOfWorms = 4;
-			} else if (startRec.contains(unprojectPosition.x, unprojectPosition.y)) {
-				game.gameSettings.setNumberOfWorms(numberOfWorms);
-				game.setScreen(new WormsScene(game));
-				dispose();
-			} else if (quitRec.contains(unprojectPosition.x, unprojectPosition.y)) {
-				dispose();
-				System.exit(0);
-			}
+				break;
+			default:
+				break;
 		}
-
 	}
 
 	private void clearPlayers() {
@@ -140,11 +160,5 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		player2.setColor(1, 1, 1, 0.2f);
 		player3.setColor(1, 1, 1, 0.2f);
 		player4.setColor(1, 1, 1, 0.2f);
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		menuTexture.dispose();
 	}
 }

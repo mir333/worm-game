@@ -17,6 +17,8 @@
  */
 package im.ligas.worms.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import im.ligas.worms.WormsConstants;
@@ -24,7 +26,7 @@ import im.ligas.worms.WormsConstants;
 /**
  * @author Miroslav Ligas
  */
-public class BaseScreen<T> implements Screen {
+public class BaseScreen<T> implements Screen, InputProcessor {
 
 	final T game;
 
@@ -42,7 +44,7 @@ public class BaseScreen<T> implements Screen {
 
 	@Override
 	public void show() {
-
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -67,11 +69,51 @@ public class BaseScreen<T> implements Screen {
 
 	@Override
 	public void hide() {
-
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
 	public void dispose() {
 
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }

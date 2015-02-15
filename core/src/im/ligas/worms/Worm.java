@@ -31,11 +31,10 @@ public class Worm {
 	private final String name;
 	private Vector2 head;
 	private Array<Float> body;
-	private int heading;
+	private Heading heading;
 
 	private int inputKeyLeft;
 	private int inputKeyRight;
-	private boolean changedDirection = true;
 	private boolean dead = false;
 	private Color color;
 
@@ -43,8 +42,10 @@ public class Worm {
 		body = new Array<Float>(WormsConstants.INIT_SIZE);
 		body.add(start.x);
 		body.add(start.y);
+		body.add(start.x);
+		body.add(start.y);
 		this.head = start;
-		heading = (int) Utils.calculateStartAngle(start);
+		heading = new Heading((int) Utils.calculateStartAngle(start));
 		this.inputKeyLeft = inputKeyLeft;
 		this.inputKeyRight = inputKeyRight;
 		this.color = color;
@@ -67,29 +68,36 @@ public class Worm {
 		return body;
 	}
 
-	public int turnLeft() {
-		changedDirection = true;
-		return heading += 1;
+	public void turnLeft(boolean start) {
+		heading.turning = start;
+		heading.turningLeft = true;
 	}
 
-	public int turnRight() {
-		changedDirection = true;
-		return heading -= 1;
+	public void turnRight(boolean start) {
+		heading.turning = start;
+		heading.turningLeft = false;
 	}
 
 	public void grow(float factor) {
 		if (!dead) {
-			head.x += (MathUtils.cosDeg(heading) * factor);
-			head.y += (MathUtils.sinDeg(heading) * factor);
+			if(heading.turning){
+				if(heading.turningLeft){
+					heading.angle+=1;
+				}else {
+					heading.angle-=1;
+				}
+			}
 
-			if (changedDirection) {
+			head.x += (MathUtils.cosDeg(heading.angle) * factor);
+			head.y += (MathUtils.sinDeg(heading.angle) * factor);
+
+			if (heading.turning) {
 				body.add(head.x);
 				body.add(head.y);
 			} else {
 				body.set(body.size - 2, head.x);
 				body.set(body.size - 1, head.y);
 			}
-			changedDirection = false;
 		}
 	}
 
@@ -124,5 +132,15 @@ public class Worm {
 
 	public void extend() {
 		body.ensureCapacity(WormsConstants.INIT_SIZE);
+	}
+
+	private class Heading{
+		int angle;
+		boolean turning;
+		boolean turningLeft;
+
+		public Heading(int angle) {
+			this.angle = angle;
+		}
 	}
 }
