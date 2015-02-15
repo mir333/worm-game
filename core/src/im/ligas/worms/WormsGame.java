@@ -23,6 +23,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import im.ligas.worms.screens.MainMenuScreen;
 
 /**
@@ -31,12 +32,22 @@ import im.ligas.worms.screens.MainMenuScreen;
 public class WormsGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public BitmapFont mediumFont;
+	public BitmapFont bigFont;
 	public GameSettings gameSettings;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		font = new BitmapFont();
+		FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("fontbold.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 24;
+		font = fontGen.generateFont(parameter);
+		parameter.size = 48;
+		mediumFont = fontGen.generateFont(parameter);
+		parameter.size = 72;
+		bigFont = fontGen.generateFont(parameter);
+		fontGen.dispose();
 		gameSettings = new GameSettings(2);
 		this.setScreen(new MainMenuScreen(this));
 	}

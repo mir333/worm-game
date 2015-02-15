@@ -20,6 +20,7 @@ package im.ligas.worms.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import im.ligas.worms.Worm;
 import im.ligas.worms.WormsGame;
 
@@ -29,7 +30,6 @@ import static im.ligas.worms.WormsConstants.CENTER;
  * @author Miroslav Ligas
  */
 public class GameOverScreen extends BaseScreen<WormsGame> {
-
 	private final Worm winner;
 
 	public GameOverScreen(WormsGame game, Worm winner) {
@@ -50,10 +50,10 @@ public class GameOverScreen extends BaseScreen<WormsGame> {
 		game.batch.setProjectionMatrix(camera.combined);
 
 		game.batch.begin();
-		game.font.setScale(2);
-		game.font.setColor(Color.RED);
-		game.font.draw(game.batch, "GAME OVER", CENTER.x - 100, CENTER.y);
-		game.font.draw(game.batch, "THE WINNER IS: " + winner, CENTER.x - 100, CENTER.y - 100);
+		game.mediumFont.setColor(Color.PURPLE);
+		game.bigFont.setColor(Color.RED);
+		game.bigFont.draw(game.batch, "GAME OVER", CENTER.x - 200, CENTER.y + 100);
+		game.mediumFont.draw(game.batch, "THE WINNER IS: " + winner, CENTER.x - 300, CENTER.y);
 		game.batch.end();
 	}
 }
