@@ -37,10 +37,11 @@ public class Worm {
 
 	private int inputKeyLeft;
 	private int inputKeyRight;
+	private int inputKeyExecute;
 	private boolean dead = false;
 	private Color color;
 
-	public Worm(Vector2 start, Color color, String name, int inputKeyLeft, int inputKeyRight) {
+	public Worm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
 		body = new Array<Float>(WormsConstants.INIT_SIZE);
 		body.add(start.x);
 		body.add(start.y);
@@ -48,8 +49,9 @@ public class Worm {
 		body.add(start.y);
 		this.head = start;
 		heading = new Heading((int) Utils.calculateStartAngle(start));
-		this.inputKeyLeft = inputKeyLeft;
-		this.inputKeyRight = inputKeyRight;
+		this.inputKeyLeft = keyLeft;
+		this.inputKeyRight = keyRight;
+		this.inputKeyExecute = keyExecute;
 		this.color = color;
 		this.name = name;
 	}
