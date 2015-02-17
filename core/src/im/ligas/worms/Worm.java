@@ -69,29 +69,35 @@ public class Worm {
 	}
 
 	public void turnLeft(boolean start) {
-		heading.turning = start;
-		heading.turningLeft = true;
+		if (start) {
+			heading.turning--;
+		} else {
+			heading.turning++;
+		}
 	}
 
 	public void turnRight(boolean start) {
-		heading.turning = start;
-		heading.turningLeft = false;
+		if (start) {
+			heading.turning++;
+		} else {
+			heading.turning--;
+		}
 	}
 
 	public void grow(float factor) {
 		if (!dead) {
-			if(heading.turning){
-				if(heading.turningLeft){
-					heading.angle+=1;
-				}else {
-					heading.angle-=1;
+			if (heading.turning != 0) {
+				if (heading.turning < 0) {
+					heading.angle += 1;
+				} else {
+					heading.angle -= 1;
 				}
 			}
 
 			head.x += (MathUtils.cosDeg(heading.angle) * factor);
 			head.y += (MathUtils.sinDeg(heading.angle) * factor);
 
-			if (heading.turning) {
+			if (heading.turning != 0) {
 				body.add(head.x);
 				body.add(head.y);
 			} else {
@@ -134,10 +140,9 @@ public class Worm {
 		body.ensureCapacity(WormsConstants.INIT_SIZE);
 	}
 
-	private class Heading{
+	private class Heading {
 		int angle;
-		boolean turning;
-		boolean turningLeft;
+		short turning;
 
 		public Heading(int angle) {
 			this.angle = angle;

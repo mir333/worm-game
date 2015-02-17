@@ -195,9 +195,11 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		for (Worm worm : worms) {
 			if (keycode == worm.getInputKeyLeft()) {
 				worm.turnLeft(startEnd);
+				break;
 			}
 			if (keycode == worm.getInputKeyRight()) {
 				worm.turnRight(startEnd);
+				break;
 			}
 		}
 
