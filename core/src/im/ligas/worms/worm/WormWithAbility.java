@@ -18,38 +18,11 @@
 
 package im.ligas.worms.worm;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-
 /**
  * @author Miroslav Ligas
  */
-public interface Worm {
-	int getInputKeyLeft();
+public interface WormWithAbility extends Worm{
+	int getInputKeyExecute();
 
-	int getInputKeyRight();
-
-	Vector2 getHead();
-
-	Array<Float> getBody();
-
-	void turnLeft(boolean start);
-
-	void turnRight(boolean start);
-
-	void grow(float factor);
-
-	void setDead(boolean dead);
-
-	boolean isDead();
-
-	void draw(ShapeRenderer shapeRenderer);
-
-	@Override
-	String toString();
-
-	String toDebugString();
-
-	void extend();
+	void execute();
 }

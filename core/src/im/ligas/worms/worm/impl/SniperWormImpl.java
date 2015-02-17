@@ -15,41 +15,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package im.ligas.worms.worm.impl;
 
-package im.ligas.worms.worm;
-
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import im.ligas.worms.worm.WormWithAbility;
 
 /**
  * @author Miroslav Ligas
  */
-public interface Worm {
-	int getInputKeyLeft();
+public class SniperWormImpl extends WormImpl implements WormWithAbility {
+	private int inputKeyExecute;
 
-	int getInputKeyRight();
 
-	Vector2 getHead();
+	public SniperWormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
+		super(start, color, name, keyLeft, keyRight);
+		this.inputKeyExecute = keyExecute;
 
-	Array<Float> getBody();
-
-	void turnLeft(boolean start);
-
-	void turnRight(boolean start);
-
-	void grow(float factor);
-
-	void setDead(boolean dead);
-
-	boolean isDead();
-
-	void draw(ShapeRenderer shapeRenderer);
+	}
 
 	@Override
-	String toString();
+	public int getInputKeyExecute() {
+		return inputKeyExecute;
+	}
 
-	String toDebugString();
+	@Override
+	public void execute() {
 
-	void extend();
+	}
+
 }

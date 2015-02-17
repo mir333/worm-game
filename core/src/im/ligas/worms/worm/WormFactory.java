@@ -18,38 +18,16 @@
 
 package im.ligas.worms.worm;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import im.ligas.worms.worm.impl.SniperWormImpl;
 
 /**
  * @author Miroslav Ligas
  */
-public interface Worm {
-	int getInputKeyLeft();
+public class WormFactory {
 
-	int getInputKeyRight();
-
-	Vector2 getHead();
-
-	Array<Float> getBody();
-
-	void turnLeft(boolean start);
-
-	void turnRight(boolean start);
-
-	void grow(float factor);
-
-	void setDead(boolean dead);
-
-	boolean isDead();
-
-	void draw(ShapeRenderer shapeRenderer);
-
-	@Override
-	String toString();
-
-	String toDebugString();
-
-	void extend();
+	public static WormWithAbility getSniperWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
+		return new SniperWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+	}
 }

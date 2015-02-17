@@ -20,6 +20,7 @@ package im.ligas.worms.screen;
 
 import com.badlogic.gdx.graphics.Color;
 import im.ligas.worms.worm.Worm;
+import im.ligas.worms.worm.impl.WormImpl;
 import im.ligas.worms.WormsGame;
 
 import static im.ligas.worms.WormsConstants.CENTER;

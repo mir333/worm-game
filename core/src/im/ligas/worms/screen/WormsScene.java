@@ -19,14 +19,16 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import im.ligas.worms.WormsGame;
 import im.ligas.worms.util.Utils;
 import im.ligas.worms.worm.Worm;
-import im.ligas.worms.WormsGame;
+import im.ligas.worms.worm.WormFactory;
+import im.ligas.worms.worm.WormWithAbility;
 
 import static im.ligas.worms.WormsConstants.*;
 
@@ -41,7 +43,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	private ShapeRenderer shapeRenderer;
 
-	private Array<Worm> worms;
+	private Array<WormWithAbility> worms;
 	private short wormsCount;
 
 	private int shapeRendererSize;
@@ -51,17 +53,17 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		super(game);
 
 		int numberOfWorms = game.gameSettings.getNumberOfWorms();
-		worms = new Array<Worm>(numberOfWorms);
+		worms = new Array<WormWithAbility>(numberOfWorms);
 
 		switch (numberOfWorms) {
 			case 4:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Input.Keys.Z, Input.Keys.C));
+				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X));
 			case 3:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Input.Keys.J, Input.Keys.L));
+				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K));
 			case 2:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Input.Keys.Q, Input.Keys.E));
+				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W));
 			case 1:
-				worms.add(new Worm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Input.Keys.LEFT, Input.Keys.RIGHT));
+				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN));
 			default:
 				break;
 		}
@@ -97,13 +99,13 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			return;
 		}
 
-		for (Worm worm : worms) {
+		for (WormWithAbility worm : worms) {
 			autoExtendLine(worm, delta);
 		}
 
 		short dead = 0;
 		for (int i = 0; i < worms.size; i++) {
-			Worm worm = worms.get(i);
+			WormWithAbility worm = worms.get(i);
 			if (worm.isDead() ||
 				wallCollision(worm) ||
 				selfCollision(worm) ||
@@ -115,7 +117,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		gameOver = (wormsCount - dead) < 2;
 
 
-		for (Worm worm : worms) {
+		for (WormWithAbility worm : worms) {
 			try {
 				worm.draw(shapeRenderer);
 			} catch (ArrayIndexOutOfBoundsException x) {
@@ -135,11 +137,11 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 
-	private boolean opponentCollision(Worm worm, int currentWorm, Array<Worm> worms) {
+	private boolean opponentCollision(WormWithAbility worm, int currentWorm, Array<WormWithAbility> worms) {
 		boolean dead = false;
-		for (int i = 0; i < this.worms.size; i++) {
+		for (int i = 0; i < worms.size; i++) {
 			if (i != currentWorm) {
-				Array<Float> opponentBody = this.worms.get(i).getBody();
+				Array<Float> opponentBody = worms.get(i).getBody();
 				dead = Utils.checkOpponentCollisions(worm.getHead(), opponentBody);
 			}
 			if (dead) {
@@ -150,23 +152,23 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		return worm.isDead();
 	}
 
-	private boolean selfCollision(Worm worm) {
+	private boolean selfCollision(WormWithAbility worm) {
 		worm.setDead(Utils.checkSelfCollisions(worm.getHead(), worm.getBody()));
 		return worm.isDead();
 	}
 
-	private boolean wallCollision(Worm worm) {
+	private boolean wallCollision(WormWithAbility worm) {
 		Vector2 head = worm.getHead();
 		worm.setDead(head.x < 0 || head.x > DIMENSION_X || head.y < 0 || head.y > DIMENSION_Y);
 		return worm.isDead();
 	}
 
 
-	private void autoExtendLine(Worm worm, float delta) {
+	private void autoExtendLine(WormWithAbility worm, float delta) {
 		worm.grow(GROW_FACTOR * delta);
 	}
 
-	private void printDebugData(Array<Worm> worms) {
+	private void printDebugData(Array<WormWithAbility> worms) {
 		game.batch.begin();
 		game.font.setColor(Color.GREEN);
 		game.font.setScale(1);
@@ -192,13 +194,18 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 	private void turnWorms(int keycode, boolean startEnd) {
-		for (Worm worm : worms) {
+		for (WormWithAbility worm : worms) {
 			if (keycode == worm.getInputKeyLeft()) {
 				worm.turnLeft(startEnd);
 				break;
 			}
 			if (keycode == worm.getInputKeyRight()) {
 				worm.turnRight(startEnd);
+				break;
+			}
+
+			if (keycode == worm.getInputKeyExecute()) {
+				worm.execute();
 				break;
 			}
 		}
