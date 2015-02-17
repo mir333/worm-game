@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package im.ligas.worms.screens;
+package im.ligas.worms.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import im.ligas.worms.Worm;
+import im.ligas.worms.worm.Worm;
 import im.ligas.worms.WormsGame;
 
 import static im.ligas.worms.WormsConstants.CENTER;

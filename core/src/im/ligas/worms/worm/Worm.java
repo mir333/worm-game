@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package im.ligas.worms;
+package im.ligas.worms.worm;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import im.ligas.worms.util.Utils;
+import im.ligas.worms.WormsConstants;
 
 /**
  * Created by ligasm on 2/8/15.

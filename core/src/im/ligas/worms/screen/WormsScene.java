@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package im.ligas.worms.screens;
+package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,8 +24,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import im.ligas.worms.Utils;
-import im.ligas.worms.Worm;
+import im.ligas.worms.util.Utils;
+import im.ligas.worms.worm.Worm;
 import im.ligas.worms.WormsGame;
 
 import static im.ligas.worms.WormsConstants.*;
