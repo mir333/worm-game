@@ -8,3 +8,21 @@ if you want to try it out run
 ```
 ./gradle :desktop:run
 ```
+
+Controles are still hardcoded:
+worm 1: 
+Left : Left arrow
+Right: Right arrow
+
+worm 2: 
+Left : Q
+Right: E
+Special ability: W
+
+worm 3: 
+Left : J
+Right: L
+
+worm 4: 
+Left : Z
+Right: C
