@@ -10,19 +10,30 @@ if you want to try it out run
 ```
 
 Controles are still hardcoded:
-worm 1: 
+
+**worm 1:**
+
 Left : Left arrow
+
 Right: Right arrow
 
-worm 2: 
+
+**worm 2:**
+
 Left : Q
+
 Right: E
+
 Special ability: W
 
-worm 3: 
+**worm 3:**
+
 Left : J
+
 Right: L
 
-worm 4: 
+**worm 4:**
+
 Left : Z
+
 Right: C
