@@ -57,22 +57,22 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
 
-		int numberOfWorms = game.gameSettings.getSelectedWorms();
-		worms = new Array<Worm>(numberOfWorms);
+		int selectedWorms = game.gameSettings.getSelectedWorms();
+		worms = new Array<Worm>(4);
 
-		switch (numberOfWorms) {
-			case 4:
-				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X));
-			case 3:
-				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K));
-			case 2:
-				WormWithAbility turboWorm = WormFactory.getTurboWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W);
-				turboWorm.setCoolDownBarPos(0, CENTER.y, true);
-				worms.add(turboWorm);
-			case 1:
-				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN));
-			default:
-				break;
+		if ((selectedWorms & 1) == 1) {
+			WormWithAbility turboWorm = WormFactory.getTurboWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W);
+			turboWorm.setCoolDownBarPos(0, CENTER.y, true);
+			worms.add(turboWorm);
+		}
+		if ((selectedWorms & 2) == 2) {
+			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN));
+		}
+		if ((selectedWorms & 4) == 4) {
+			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K));
+		}
+		if ((selectedWorms & 8) == 8) {
+			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X));
 		}
 
 		wormsCount = (short) worms.size;
@@ -219,7 +219,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 				break;
 			}
 
-			if(startEnd && worm instanceof WormWithAbility){
+			if (startEnd && worm instanceof WormWithAbility) {
 				WormWithAbility wormWithAbility = (WormWithAbility) worm;
 				if (keycode == wormWithAbility.getInputKeyExecute()) {
 					wormWithAbility.execute();

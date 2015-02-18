@@ -19,67 +19,75 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import im.ligas.worms.WormsGame;
 
-import static im.ligas.worms.WormsConstants.CENTER;
+import static im.ligas.worms.WormsConstants.*;
 
 /**
  * @author Miroslav Ligas
  */
 public class MainMenuScreen extends BaseScreen<WormsGame> {
 	private final Vector3 touchPosition;
-	private Texture menuTexture;
-	private final Sprite quit;
-	private final Sprite start;
-	private final Sprite player1;
-	private final Sprite player2;
-	private final Sprite player3;
-	private final Sprite player4;
-	private final Rectangle startRec;
+	private final Music music;
+	private final Texture menuTexture;
+	private final Sprite[] controls = new Sprite[7];
+	private final Sprite[] players = new Sprite[4];
 
-	private final Rectangle quitRec;
-	private final Rectangle player1Rec;
-	private final Rectangle player2Rec;
-	private final Rectangle player3Rec;
-	private final Rectangle player4Rec;
+	private Sprite help;
 
 	public MainMenuScreen(final WormsGame game) {
 		super(game);
+
+		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+		music.setLooping(true);
+
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
 
-		start = new Sprite(menuTexture, 0, 96, 400, 96);
-		start.setPosition(CENTER.x - 200, CENTER.y - 100);
-		startRec = new Rectangle(CENTER.x - 200, CENTER.y - 100, 400, 96);
+		/* Play */
+		controls[0] = new Sprite(menuTexture, 0, 96, 400, 96);
+		controls[0].setPosition(CENTER.x - 200, CENTER.y - 100);
+		/* Quit */
+		controls[1] = new Sprite(menuTexture, 0, 192, 400, 96);
+		controls[1].setPosition(CENTER.x - 200, CENTER.y - 200);
+		/* Ability mode */
+		controls[2] = new Sprite(menuTexture, 256, 288, 64, 64);
+		controls[2].setPosition(DIMENSION_X - 110, DIMENSION_Y - 110);
+		/* Music on*/
+		controls[3] = new Sprite(menuTexture, 0, 288, 64, 64);
+		controls[3].setPosition(20, DIMENSION_Y - 110);
+		/* Sound on*/
+		controls[4] = new Sprite(menuTexture, 128, 288, 64, 64);
+		controls[4].setPosition(120, DIMENSION_Y - 110);
+		/* Music off*/
+		controls[5] = new Sprite(menuTexture, 64, 288, 64, 64);
+		controls[5].setPosition(20, DIMENSION_Y - 110);
+		/* Sound off*/
+		controls[6] = new Sprite(menuTexture, 192, 288, 64, 64);
+		controls[6].setPosition(120, DIMENSION_Y - 110);
 
-		quit = new Sprite(menuTexture, 0, 192, 400, 96);
-		quit.setPosition(CENTER.x - 200, CENTER.y - 200);
-		quitRec = new Rectangle(CENTER.x - 200, CENTER.y - 200, 400, 96);
+		players[0] = new Sprite(menuTexture, 0, 0, 96, 96);
+		players[0].setPosition(CENTER.x - 200, CENTER.y - 0);
 
-		player1 = new Sprite(menuTexture, 0, 0, 96, 96);
-		player1.setPosition(CENTER.x - 200, CENTER.y - 0);
-		player1Rec = new Rectangle(CENTER.x - 200, CENTER.y - 0, 96, 96);
+		players[1] = new Sprite(menuTexture, 96, 0, 96, 96);
+		players[1].setPosition(CENTER.x - 100, CENTER.y - 0);
 
-		player2 = new Sprite(menuTexture, 96, 0, 96, 96);
-		player2.setPosition(CENTER.x - 100, CENTER.y - 0);
-		player2Rec = new Rectangle(CENTER.x - 100, CENTER.y - 0, 96, 96);
+		players[2] = new Sprite(menuTexture, 192, 0, 96, 96);
+		players[2].setPosition(CENTER.x, CENTER.y - 0);
 
-		player3 = new Sprite(menuTexture, 192, 0, 96, 96);
-		player3.setPosition(CENTER.x, CENTER.y - 0);
-		player3Rec = new Rectangle(CENTER.x, CENTER.y - 0, 96, 96);
-
-		player4 = new Sprite(menuTexture, 288, 0, 96, 96);
-		player4.setPosition(CENTER.x + 100, CENTER.y - 0);
-		player4Rec = new Rectangle(CENTER.x + 100, CENTER.y - 0, 96, 96);
+		players[3] = new Sprite(menuTexture, 288, 0, 96, 96);
+		players[3].setPosition(CENTER.x + 100, CENTER.y - 0);
 
 		touchPosition = new Vector3();
 
-		clearPlayers();
-		selectPlayerButton(game.gameSettings.getNumberOfWorms());
+		players[2].setColor(1, 1, 1, 0.2f);
+		players[3].setColor(1, 1, 1, 0.2f);
 	}
 
 	@Override
@@ -88,25 +96,35 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		touchPosition.y = screenY;
 		touchPosition.z = 0;
 		Vector3 unprojectPosition = camera.unproject(touchPosition);
-		clearPlayers();
-		int numberOfWorms = 2;
-		if (player1Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
-			numberOfWorms = 1;
-		} else if (player2Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
-			numberOfWorms = 2;
-		} else if (player3Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
-			numberOfWorms = 3;
-		} else if (player4Rec.contains(unprojectPosition.x, unprojectPosition.y)) {
-			numberOfWorms = 4;
-		} else if (startRec.contains(unprojectPosition.x, unprojectPosition.y)) {
+
+		for (int i = 0; i < players.length; i++) {
+			if (spriteContains(players[i], unprojectPosition)) {
+				selectSprite(players[i]);
+			}
+		}
+
+		if (spriteContains(controls[0], unprojectPosition)) {
+			game.gameSettings.setSelectedWorms(calculateSelectedWorms());
 			game.setScreen(new WormsScene(game));
 			dispose();
-		} else if (quitRec.contains(unprojectPosition.x, unprojectPosition.y)) {
+		} else if (spriteContains(controls[1], unprojectPosition)) {
 			dispose();
 			System.exit(0);
+		} else if (spriteContains(controls[2], unprojectPosition)) {
+			selectSprite(controls[2]);
+			game.gameSettings.setSpecialAbilityEnabled(!game.gameSettings.isSpecialAbilityEnabled());
+		} else if (spriteContains(controls[3], unprojectPosition)) {
+			help = controls[3];
+			controls[3] = controls[5];
+			controls[5] = help;
+			stopPlayMusic();
+		} else if (spriteContains(controls[4], unprojectPosition)) {
+			help = controls[4];
+			controls[4] = controls[6];
+			controls[6] = help;
+			game.gameSettings.setSound(!game.gameSettings.isSound());
 		}
-		selectPlayerButton(numberOfWorms);
-		game.gameSettings.setNumberOfWorms(numberOfWorms);
+
 		return false;
 	}
 
@@ -120,45 +138,68 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		game.font.setColor(Color.GREEN);
 		game.font.draw(game.batch, "Tap anywhere to begin!", CENTER.x - 100, 30);
 
-		start.draw(game.batch);
-		quit.draw(game.batch);
-		player1.draw(game.batch);
-		player2.draw(game.batch);
-		player2.draw(game.batch);
-		player3.draw(game.batch);
-		player4.draw(game.batch);
+		for (int i = 0; i < controls.length - 2; i++) {
+			controls[i].draw(game.batch);
+		}
+
+		for (Sprite player : players) {
+			player.draw(game.batch);
+		}
+
 		game.batch.end();
+	}
+
+	@Override
+	public void show() {
+		music.play();
+		super.show();
+	}
+
+	@Override
+	public void hide() {
+		music.stop();
+		super.hide();
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
 		menuTexture.dispose();
+		music.dispose();
 	}
 
-	private void selectPlayerButton(int numberOfWorms) {
-		switch (numberOfWorms) {
-			case 1:
-				player1.setColor(1, 1, 1, 1);
-				break;
-			case 2:
-				player2.setColor(1, 1, 1, 1);
-				break;
-			case 3:
-				player3.setColor(1, 1, 1, 1);
-				break;
-			case 4:
-				player4.setColor(1, 1, 1, 1);
-				break;
-			default:
-				break;
+
+	private void selectSprite(Sprite player) {
+		if (MathUtils.isEqual(1, player.getColor().a, 0.01f)) {
+			player.setColor(1, 1, 1, 0.2f);
+		} else {
+			player.setColor(1, 1, 1, 1);
 		}
 	}
 
-	private void clearPlayers() {
-		player1.setColor(1, 1, 1, 0.2f);
-		player2.setColor(1, 1, 1, 0.2f);
-		player3.setColor(1, 1, 1, 0.2f);
-		player4.setColor(1, 1, 1, 0.2f);
+	private int calculateSelectedWorms() {
+		int encodedPlayers = 0;
+		for (int i = 0; i < players.length; i++) {
+			if (MathUtils.isEqual(1, players[i].getColor().a, 0.01f)) {
+				encodedPlayers += Math.pow(2, i);
+			}
+		}
+		return encodedPlayers;
+	}
+
+	private void stopPlayMusic() {
+		if (game.gameSettings.isMusic()) {
+			game.gameSettings.setMusic(false);
+			music.stop();
+		} else {
+			game.gameSettings.setMusic(true);
+			music.play();
+		}
+
+	}
+
+	private boolean spriteContains(Sprite sprite, Vector3 position) {
+		Rectangle boundingRectangle = sprite.getBoundingRectangle();
+		return boundingRectangle.contains(position.x, position.y);
 	}
 }

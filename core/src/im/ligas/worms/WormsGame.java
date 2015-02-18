@@ -48,7 +48,7 @@ public class WormsGame extends Game {
 		parameter.size = 72;
 		bigFont = fontGen.generateFont(parameter);
 		fontGen.dispose();
-		gameSettings = new GameSettings(2);
+		gameSettings = new GameSettings();
 		this.setScreen(new MainMenuScreen(this));
 	}
 
