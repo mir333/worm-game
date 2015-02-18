@@ -25,4 +25,6 @@ public interface WormWithAbility extends Worm{
 	int getInputKeyExecute();
 
 	void execute();
+
+	void setCoolDownBarPos(float x, float y, boolean up);
 }

@@ -25,10 +25,13 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class WormsConstants {
 
+	public static final long DEFAULT_COOL_DOWN = 5000;
 	public static final int GROW_FACTOR = 20;
+
 	public static final int DIMENSION_X = 1024;
 	public static final int DIMENSION_Y = 600;
 	public static final Vector2 CENTER = new Vector2((DIMENSION_X / 2), (DIMENSION_Y / 2));
+
 	public static final int INIT_SIZE = 10000;
 	public static final float COLLISION_DISTANCE = 0.5f;
 }

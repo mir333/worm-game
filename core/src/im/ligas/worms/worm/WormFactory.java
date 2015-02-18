@@ -21,6 +21,7 @@ package im.ligas.worms.worm;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import im.ligas.worms.worm.impl.SniperWormImpl;
+import im.ligas.worms.worm.impl.TurboWormImpl;
 
 /**
  * @author Miroslav Ligas
@@ -29,5 +30,9 @@ public class WormFactory {
 
 	public static WormWithAbility getSniperWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
 		return new SniperWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+	}
+
+	public static WormWithAbility getTurboWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
+		return new TurboWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
 	}
 }

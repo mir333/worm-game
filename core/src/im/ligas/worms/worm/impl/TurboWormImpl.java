@@ -17,22 +17,33 @@
  */
 package im.ligas.worms.worm.impl;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+import im.ligas.worms.WormsConstants;
+
+import static im.ligas.worms.WormsConstants.DEFAULT_COOL_DOWN;
 
 /**
  * @author Miroslav Ligas
  */
-public class SniperWormImpl extends BaseWormWithAbilityImpl {
+public class TurboWormImpl extends BaseWormWithAbilityImpl {
 
-
-	public SniperWormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
+	public TurboWormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
 		super(start, color, name, keyLeft, keyRight, keyExecute);
-
 	}
 
 	@Override
 	public void execute() {
-
+		if (isAbilityReady()) {
+			this.grow(2 * WormsConstants.GROW_FACTOR);
+		}
+		super.execute();
 	}
+
+
+
+
 }

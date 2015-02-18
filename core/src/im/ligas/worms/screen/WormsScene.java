@@ -19,6 +19,7 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -43,7 +44,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	private ShapeRenderer shapeRenderer;
 
-	private Array<WormWithAbility> worms;
+	private Array<Worm> worms;
 	private short wormsCount;
 
 	private int shapeRendererSize;
@@ -53,7 +54,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		super(game);
 
 		int numberOfWorms = game.gameSettings.getNumberOfWorms();
-		worms = new Array<WormWithAbility>(numberOfWorms);
+		worms = new Array<Worm>(numberOfWorms);
 
 		switch (numberOfWorms) {
 			case 4:
@@ -61,7 +62,9 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			case 3:
 				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K));
 			case 2:
-				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W));
+				WormWithAbility turboWorm = WormFactory.getTurboWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W);
+				turboWorm.setCoolDownBarPos(0, CENTER.y, true);
+				worms.add(turboWorm);
 			case 1:
 				worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN));
 			default:
@@ -99,13 +102,13 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			return;
 		}
 
-		for (WormWithAbility worm : worms) {
-			autoExtendLine(worm, delta);
+		for (Worm worm : worms) {
+			worm.grow(GROW_FACTOR * delta);
 		}
 
 		short dead = 0;
 		for (int i = 0; i < worms.size; i++) {
-			WormWithAbility worm = worms.get(i);
+			Worm worm = worms.get(i);
 			if (worm.isDead() ||
 				wallCollision(worm) ||
 				selfCollision(worm) ||
@@ -117,7 +120,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		gameOver = (wormsCount - dead) < 2;
 
 
-		for (WormWithAbility worm : worms) {
+		for (Worm worm : worms) {
 			try {
 				worm.draw(shapeRenderer);
 			} catch (ArrayIndexOutOfBoundsException x) {
@@ -137,7 +140,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 
-	private boolean opponentCollision(WormWithAbility worm, int currentWorm, Array<WormWithAbility> worms) {
+	private boolean opponentCollision(Worm worm, int currentWorm, Array<Worm> worms) {
 		boolean dead = false;
 		for (int i = 0; i < worms.size; i++) {
 			if (i != currentWorm) {
@@ -152,23 +155,18 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		return worm.isDead();
 	}
 
-	private boolean selfCollision(WormWithAbility worm) {
+	private boolean selfCollision(Worm worm) {
 		worm.setDead(Utils.checkSelfCollisions(worm.getHead(), worm.getBody()));
 		return worm.isDead();
 	}
 
-	private boolean wallCollision(WormWithAbility worm) {
+	private boolean wallCollision(Worm worm) {
 		Vector2 head = worm.getHead();
 		worm.setDead(head.x < 0 || head.x > DIMENSION_X || head.y < 0 || head.y > DIMENSION_Y);
 		return worm.isDead();
 	}
 
-
-	private void autoExtendLine(WormWithAbility worm, float delta) {
-		worm.grow(GROW_FACTOR * delta);
-	}
-
-	private void printDebugData(Array<WormWithAbility> worms) {
+	private void printDebugData(Array<Worm> worms) {
 		game.batch.begin();
 		game.font.setColor(Color.GREEN);
 		game.font.setScale(1);
@@ -194,7 +192,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 	private void turnWorms(int keycode, boolean startEnd) {
-		for (WormWithAbility worm : worms) {
+		for (Worm worm : worms) {
 			if (keycode == worm.getInputKeyLeft()) {
 				worm.turnLeft(startEnd);
 				break;
@@ -204,9 +202,12 @@ public class WormsScene extends BaseScreen<WormsGame> {
 				break;
 			}
 
-			if (keycode == worm.getInputKeyExecute()) {
-				worm.execute();
-				break;
+			if(startEnd && worm instanceof WormWithAbility){
+				WormWithAbility wormWithAbility = (WormWithAbility) worm;
+				if (keycode == wormWithAbility.getInputKeyExecute()) {
+					wormWithAbility.execute();
+					break;
+				}
 			}
 		}
 
