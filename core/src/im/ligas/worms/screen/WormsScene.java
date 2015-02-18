@@ -19,8 +19,8 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -41,6 +41,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		add(new Vector2(CENTER.x - 100, CENTER.y + 100));
 		add(new Vector2(CENTER.x + 100, CENTER.y - 100));
 	}};
+	private final Music music;
 
 	private ShapeRenderer shapeRenderer;
 
@@ -53,7 +54,10 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	public WormsScene(WormsGame game) {
 		super(game);
 
-		int numberOfWorms = game.gameSettings.getNumberOfWorms();
+		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+		music.setLooping(true);
+
+		int numberOfWorms = game.gameSettings.getSelectedWorms();
 		worms = new Array<Worm>(numberOfWorms);
 
 		switch (numberOfWorms) {
@@ -135,8 +139,21 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	}
 
 	@Override
+	public void show() {
+		music.play();
+		super.show();
+	}
+
+	@Override
+	public void hide() {
+		music.stop();
+		super.hide();
+	}
+
+	@Override
 	public void dispose() {
 		shapeRenderer.dispose();
+		music.dispose();
 	}
 
 
