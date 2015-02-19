@@ -19,6 +19,7 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -66,13 +67,19 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			worms.add(turboWorm);
 		}
 		if ((selectedWorms & 2) == 2) {
-			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN));
+			WormWithAbility sniperWorm = WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN);
+			sniperWorm.setCoolDownBarPos(0, CENTER.y, false);
+			worms.add(sniperWorm);
 		}
 		if ((selectedWorms & 4) == 4) {
-			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K));
+			WormWithAbility reverseWorm = WormFactory.getReverseWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K);
+			reverseWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, true);
+			worms.add(reverseWorm);
 		}
 		if ((selectedWorms & 8) == 8) {
-			worms.add(WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X));
+			WormWithAbility splitterWorm = WormFactory.getSplitterWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X);
+			splitterWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, false);
+			worms.add(splitterWorm);
 		}
 
 		wormsCount = (short) worms.size;
