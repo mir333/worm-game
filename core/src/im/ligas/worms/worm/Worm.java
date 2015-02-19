@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.Array;
  * @author Miroslav Ligas
  */
 public interface Worm {
+	byte getId();
+
 	int getInputKeyLeft();
 
 	int getInputKeyRight();

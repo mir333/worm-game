@@ -26,9 +26,8 @@ import com.badlogic.gdx.math.Vector2;
 public class ReverseWormImpl extends BaseWormWithAbilityImpl {
 
 
-	public ReverseWormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		super(start, color, name, keyLeft, keyRight, keyExecute);
-
+	public ReverseWormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight, int keyExecute) {
+		super(start, color, id, keyLeft, keyRight, keyExecute);
 	}
 
 	@Override

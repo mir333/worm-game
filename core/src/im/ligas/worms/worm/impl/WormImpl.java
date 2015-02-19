@@ -31,7 +31,7 @@ import im.ligas.worms.worm.Worm;
  * Created by ligasm on 2/8/15.
  */
 public class WormImpl implements Worm {
-	private final String name;
+	private final byte id;
 	private Vector2 head;
 	private Array<Float> body;
 	private Heading heading;
@@ -41,7 +41,7 @@ public class WormImpl implements Worm {
 	private boolean dead = false;
 	private Color color;
 
-	public WormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight) {
+	public WormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight) {
 		body = new Array<Float>(WormsConstants.INIT_SIZE);
 		body.add(start.x);
 		body.add(start.y);
@@ -52,7 +52,12 @@ public class WormImpl implements Worm {
 		this.inputKeyLeft = keyLeft;
 		this.inputKeyRight = keyRight;
 		this.color = color;
-		this.name = name;
+		this.id = id;
+	}
+
+	@Override
+	public byte getId() {
+		return id;
 	}
 
 	@Override
@@ -135,11 +140,6 @@ public class WormImpl implements Worm {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		shapeRenderer.polyline(Utils.convertToPrimitive(body));
 		shapeRenderer.end();
-	}
-
-	@Override
-	public String toString() {
-		return name;
 	}
 
 	@Override

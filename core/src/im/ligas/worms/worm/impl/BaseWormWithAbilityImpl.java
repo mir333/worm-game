@@ -36,8 +36,8 @@ public class BaseWormWithAbilityImpl extends WormImpl implements WormWithAbility
 	private long abilityExecuted;
 	private Vector3 coolDownBarPos;
 
-	protected BaseWormWithAbilityImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		super(start, color, name, keyLeft, keyRight);
+	protected BaseWormWithAbilityImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight, int keyExecute) {
+		super(start, color, id, keyLeft, keyRight);
 		this.inputKeyExecute = keyExecute;
 		abilityReady = true;
 		coolDownBarPos = new Vector3(1, 1, 1);

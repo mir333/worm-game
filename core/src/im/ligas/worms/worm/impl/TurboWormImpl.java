@@ -31,8 +31,9 @@ import static im.ligas.worms.WormsConstants.DEFAULT_COOL_DOWN;
  */
 public class TurboWormImpl extends BaseWormWithAbilityImpl {
 
-	public TurboWormImpl(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		super(start, color, name, keyLeft, keyRight, keyExecute);
+
+	public TurboWormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight, int keyExecute) {
+		super(start, color, id, keyLeft, keyRight, keyExecute);
 	}
 
 	@Override

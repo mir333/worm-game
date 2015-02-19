@@ -47,7 +47,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	private ShapeRenderer shapeRenderer;
 
 	private Array<Worm> worms;
-	private short wormsCount;
+	private byte wormsCount;
 
 	private int shapeRendererSize;
 	private boolean gameOver;
@@ -62,27 +62,27 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		worms = new Array<Worm>(4);
 
 		if ((selectedWorms & 1) == 1) {
-			WormWithAbility turboWorm = WormFactory.getTurboWorm(new Vector2(START_POSITIONS.get(1)), Color.BLUE, "Blue worm", Keys.Q, Keys.E, Keys.W);
+			WormWithAbility turboWorm = WormFactory.getTurboWorm(new Vector2(START_POSITIONS.get(1)), Keys.Q, Keys.E, Keys.W);
 			turboWorm.setCoolDownBarPos(0, CENTER.y, true);
 			worms.add(turboWorm);
 		}
 		if ((selectedWorms & 2) == 2) {
-			WormWithAbility sniperWorm = WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Color.RED, "Red worm", Keys.LEFT, Keys.RIGHT, Keys.DOWN);
+			WormWithAbility sniperWorm = WormFactory.getSniperWorm(new Vector2(START_POSITIONS.get(0)), Keys.LEFT, Keys.RIGHT, Keys.DOWN);
 			sniperWorm.setCoolDownBarPos(0, CENTER.y, false);
 			worms.add(sniperWorm);
 		}
 		if ((selectedWorms & 4) == 4) {
-			WormWithAbility reverseWorm = WormFactory.getReverseWorm(new Vector2(START_POSITIONS.get(2)), Color.YELLOW, "Yellow worm", Keys.J, Keys.L, Keys.K);
+			WormWithAbility reverseWorm = WormFactory.getReverseWorm(new Vector2(START_POSITIONS.get(2)), Keys.J, Keys.L, Keys.K);
 			reverseWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, true);
 			worms.add(reverseWorm);
 		}
 		if ((selectedWorms & 8) == 8) {
-			WormWithAbility splitterWorm = WormFactory.getSplitterWorm(new Vector2(START_POSITIONS.get(3)), Color.GREEN, "Green worm", Keys.Z, Keys.C, Keys.X);
+			WormWithAbility splitterWorm = WormFactory.getSplitterWorm(new Vector2(START_POSITIONS.get(3)), Keys.Z, Keys.C, Keys.X);
 			splitterWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, false);
 			worms.add(splitterWorm);
 		}
 
-		wormsCount = (short) worms.size;
+		wormsCount = (byte) worms.size;
 
 		shapeRenderer = new ShapeRenderer(INIT_SIZE);
 
@@ -117,7 +117,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			worm.grow(GROW_FACTOR * delta);
 		}
 
-		short dead = 0;
+		byte dead = 0;
 		for (int i = 0; i < worms.size; i++) {
 			Worm worm = worms.get(i);
 			if (worm.isDead() ||

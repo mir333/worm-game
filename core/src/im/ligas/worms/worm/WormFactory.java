@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import im.ligas.worms.worm.impl.ReverseWormImpl;
 import im.ligas.worms.worm.impl.SniperWormImpl;
+import im.ligas.worms.worm.impl.SplitterWormImpl;
 import im.ligas.worms.worm.impl.TurboWormImpl;
 
 /**
@@ -29,19 +30,20 @@ import im.ligas.worms.worm.impl.TurboWormImpl;
  */
 public class WormFactory {
 
-	public static WormWithAbility getSniperWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		return new SniperWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+
+	public static WormWithAbility getTurboWorm(Vector2 start, int keyLeft, int keyRight, int keyExecute) {
+		return new TurboWormImpl(start, Color.RED, (byte) 0, keyLeft, keyRight, keyExecute);
 	}
 
-	public static WormWithAbility getTurboWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		return new TurboWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+	public static WormWithAbility getSniperWorm(Vector2 start, int keyLeft, int keyRight, int keyExecute) {
+		return new SniperWormImpl(start, Color.BLUE, (byte) 1, keyLeft, keyRight, keyExecute);
 	}
 
-	public static WormWithAbility getSplitterWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		return new SniperWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+	public static WormWithAbility getReverseWorm(Vector2 start, int keyLeft, int keyRight, int keyExecute) {
+		return new ReverseWormImpl(start, Color.YELLOW, (byte) 2, keyLeft, keyRight, keyExecute);
 	}
 
-	public static WormWithAbility getReverseWorm(Vector2 start, Color color, String name, int keyLeft, int keyRight, int keyExecute) {
-		return new ReverseWormImpl(start, color, name, keyLeft, keyRight, keyExecute);
+	public static WormWithAbility getSplitterWorm(Vector2 start, int keyLeft, int keyRight, int keyExecute) {
+		return new SplitterWormImpl(start, Color.GREEN, (byte) 3, keyLeft, keyRight, keyExecute);
 	}
 }

@@ -18,10 +18,12 @@
 
 package im.ligas.worms.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import im.ligas.worms.worm.Worm;
-import im.ligas.worms.worm.impl.WormImpl;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import im.ligas.worms.WormsGame;
+import im.ligas.worms.worm.Worm;
 
 import static im.ligas.worms.WormsConstants.CENTER;
 
@@ -29,11 +31,16 @@ import static im.ligas.worms.WormsConstants.CENTER;
  * @author Miroslav Ligas
  */
 public class GameOverScreen extends BaseScreen<WormsGame> {
-	private final Worm winner;
+	private final Texture wormTexture;
+	private Sprite sprite;
 
 	public GameOverScreen(WormsGame game, Worm winner) {
 		super(game);
-		this.winner = winner;
+		wormTexture = new Texture(Gdx.files.internal("worm.png"));
+		if (winner != null) {
+			sprite = new Sprite(wormTexture, winner.getId() * 96, 0, 96, 96);
+			sprite.setPosition(CENTER.x - 48, CENTER.y-200);
+		}
 	}
 
 	@Override
@@ -52,7 +59,17 @@ public class GameOverScreen extends BaseScreen<WormsGame> {
 		game.mediumFont.setColor(Color.PURPLE);
 		game.bigFont.setColor(Color.RED);
 		game.bigFont.draw(game.batch, "GAME OVER", CENTER.x - 200, CENTER.y + 100);
-		game.mediumFont.draw(game.batch, "THE WINNER IS: " + winner, CENTER.x - 300, CENTER.y);
+		if (sprite != null) {
+			game.mediumFont.draw(game.batch, "THE WINNER IS", CENTER.x - 170, CENTER.y);
+			sprite.draw(game.batch);
+		}
+
 		game.batch.end();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		wormTexture.dispose();
 	}
 }
