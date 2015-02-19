@@ -37,6 +37,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 	private final Vector3 touchPosition;
 	private final Music music;
 	private final Texture menuTexture;
+	private final Texture wormTexture;
 	private final Sprite[] controls = new Sprite[7];
 	private final Sprite[] players = new Sprite[4];
 
@@ -49,39 +50,40 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		music.setLooping(true);
 
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
+		wormTexture = new Texture(Gdx.files.internal("worm.png"));
 
 		/* Play */
-		controls[0] = new Sprite(menuTexture, 0, 96, 400, 96);
+		controls[0] = new Sprite(menuTexture, 0, 0, 400, 96);
 		controls[0].setPosition(CENTER.x - 200, CENTER.y - 100);
 		/* Quit */
-		controls[1] = new Sprite(menuTexture, 0, 192, 400, 96);
+		controls[1] = new Sprite(menuTexture, 0, 96, 400, 96);
 		controls[1].setPosition(CENTER.x - 200, CENTER.y - 200);
 		/* Ability mode */
-		controls[2] = new Sprite(menuTexture, 256, 288, 64, 64);
+		controls[2] = new Sprite(menuTexture, 256, 192, 64, 64);
 		controls[2].setPosition(DIMENSION_X - 110, DIMENSION_Y - 110);
 		/* Music on*/
-		controls[3] = new Sprite(menuTexture, 0, 288, 64, 64);
+		controls[3] = new Sprite(menuTexture, 0, 192, 64, 64);
 		controls[3].setPosition(20, DIMENSION_Y - 110);
 		/* Sound on*/
-		controls[4] = new Sprite(menuTexture, 128, 288, 64, 64);
-		controls[4].setPosition(120, DIMENSION_Y - 110);
+		controls[4] = new Sprite(menuTexture, 128, 192, 64, 64);
+		controls[4].setPosition(20, DIMENSION_Y - 200);
 		/* Music off*/
-		controls[5] = new Sprite(menuTexture, 64, 288, 64, 64);
+		controls[5] = new Sprite(menuTexture, 64, 192, 64, 64);
 		controls[5].setPosition(20, DIMENSION_Y - 110);
 		/* Sound off*/
-		controls[6] = new Sprite(menuTexture, 192, 288, 64, 64);
-		controls[6].setPosition(120, DIMENSION_Y - 110);
+		controls[6] = new Sprite(menuTexture, 192, 192, 64, 64);
+		controls[6].setPosition(20, DIMENSION_Y - 200);
 
-		players[0] = new Sprite(menuTexture, 0, 0, 96, 96);
+		players[0] = new Sprite(wormTexture, 0, 0, 96, 96);
 		players[0].setPosition(CENTER.x - 200, CENTER.y - 0);
 
-		players[1] = new Sprite(menuTexture, 96, 0, 96, 96);
+		players[1] = new Sprite(wormTexture, 96, 0, 96, 96);
 		players[1].setPosition(CENTER.x - 100, CENTER.y - 0);
 
-		players[2] = new Sprite(menuTexture, 192, 0, 96, 96);
+		players[2] = new Sprite(wormTexture, 192, 0, 96, 96);
 		players[2].setPosition(CENTER.x, CENTER.y - 0);
 
-		players[3] = new Sprite(menuTexture, 288, 0, 96, 96);
+		players[3] = new Sprite(wormTexture, 288, 0, 96, 96);
 		players[3].setPosition(CENTER.x + 100, CENTER.y - 0);
 
 		touchPosition = new Vector3();
@@ -165,6 +167,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 	public void dispose() {
 		super.dispose();
 		menuTexture.dispose();
+		wormTexture.dispose();
 		music.dispose();
 	}
 
