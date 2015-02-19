@@ -19,6 +19,7 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -32,11 +33,17 @@ import static im.ligas.worms.WormsConstants.CENTER;
  */
 public class GameOverScreen extends BaseScreen<WormsGame> {
 	private final Texture wormTexture;
+	private final Music music;
 	private Sprite sprite;
 
 	public GameOverScreen(WormsGame game, Worm winner) {
 		super(game);
+
 		wormTexture = new Texture(Gdx.files.internal("worm.png"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("victory.mp3"));
+		music.setLooping(true);
+
+
 		if (winner != null) {
 			sprite = new Sprite(wormTexture, winner.getId() * 96, 0, 96, 96);
 			sprite.setPosition(CENTER.x - 48, CENTER.y-200);
@@ -68,8 +75,23 @@ public class GameOverScreen extends BaseScreen<WormsGame> {
 	}
 
 	@Override
+	public void show() {
+		if(game.gameSettings.isMusic()){
+			music.play();
+		}
+		super.show();
+	}
+
+	@Override
+	public void hide() {
+		music.stop();
+		super.hide();
+	}
+
+	@Override
 	public void dispose() {
 		super.dispose();
 		wormTexture.dispose();
+		music.dispose();
 	}
 }
