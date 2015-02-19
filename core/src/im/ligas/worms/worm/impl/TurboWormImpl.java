@@ -18,6 +18,7 @@
 package im.ligas.worms.worm.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -31,15 +32,19 @@ import static im.ligas.worms.WormsConstants.DEFAULT_COOL_DOWN;
  */
 public class TurboWormImpl extends BaseWormWithAbilityImpl {
 
+	private final Sound sound;
 
 	public TurboWormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight, int keyExecute) {
 		super(start, color, id, keyLeft, keyRight, keyExecute);
+
+		sound = Gdx.audio.newSound(Gdx.files.internal("speed.wav"));
 	}
 
 	@Override
 	public void execute() {
 		if (isAbilityReady()) {
 			this.grow(2 * WormsConstants.GROW_FACTOR);
+			sound.play();
 		}
 		super.execute();
 	}
