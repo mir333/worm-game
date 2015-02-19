@@ -147,7 +147,9 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	@Override
 	public void show() {
-		music.play();
+		if(game.gameSettings.isMusic()) {
+			music.play();
+		}
 		super.show();
 	}
 
