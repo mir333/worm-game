@@ -6,7 +6,7 @@ It's a libGDX based game.
 if you want to try it out run
 
 ```
-./gradle :desktop:run
+./gradlew :desktop:run
 ```
 
 Controles are still hardcoded:
