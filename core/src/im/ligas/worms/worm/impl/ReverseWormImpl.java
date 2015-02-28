@@ -63,7 +63,7 @@ public class ReverseWormImpl extends BaseWormWithAbilityImpl {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	public void dispose() {
 		sound.dispose();
 	}
 

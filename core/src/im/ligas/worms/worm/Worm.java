@@ -54,4 +54,6 @@ public interface Worm {
 	String toDebugString();
 
 	void extend();
+
+	void dispose();
 }

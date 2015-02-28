@@ -162,6 +162,9 @@ public class WormsScene extends BaseScreen<WormsGame> {
 	public void dispose() {
 		shapeRenderer.dispose();
 		music.dispose();
+		for (Worm worm : worms) {
+			worm.dispose();
+		}
 	}
 
 

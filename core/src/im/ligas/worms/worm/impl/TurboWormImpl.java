@@ -49,7 +49,8 @@ public class TurboWormImpl extends BaseWormWithAbilityImpl {
 		super.execute();
 	}
 
-
-
-
+	@Override
+	public void dispose()  {
+		sound.dispose();
+	}
 }

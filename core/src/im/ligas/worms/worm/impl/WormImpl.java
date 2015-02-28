@@ -156,6 +156,10 @@ public class WormImpl implements Worm {
 		body.ensureCapacity(WormsConstants.INIT_SIZE);
 	}
 
+
+	@Override
+	public void dispose() {}
+
 	protected class Heading {
 		int angle;
 		short turning;

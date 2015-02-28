@@ -30,7 +30,7 @@ import static im.ligas.worms.WormsConstants.DEFAULT_COOL_DOWN;
 /**
  * @author Miroslav Ligas
  */
-public class BaseWormWithAbilityImpl extends WormImpl implements WormWithAbility {
+public abstract class BaseWormWithAbilityImpl extends WormImpl implements WormWithAbility {
 	private final int inputKeyExecute;
 	private boolean abilityReady;
 	private long abilityExecuted;
