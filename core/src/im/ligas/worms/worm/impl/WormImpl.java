@@ -18,6 +18,7 @@
 
 package im.ligas.worms.worm.impl;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -32,9 +33,9 @@ import im.ligas.worms.worm.Worm;
  */
 public class WormImpl implements Worm {
 	private final byte id;
-	private Vector2 head;
-	private Array<Float> body;
-	private Heading heading;
+	protected Vector2 head;
+	protected Array<Float> body;
+	protected Heading heading;
 
 	private int inputKeyLeft;
 	private int inputKeyRight;
@@ -155,7 +156,7 @@ public class WormImpl implements Worm {
 		body.ensureCapacity(WormsConstants.INIT_SIZE);
 	}
 
-	private class Heading {
+	protected class Heading {
 		int angle;
 		short turning;
 

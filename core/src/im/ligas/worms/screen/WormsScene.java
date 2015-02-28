@@ -19,7 +19,6 @@
 package im.ligas.worms.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -73,12 +72,12 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		}
 		if ((selectedWorms & 4) == 4) {
 			WormWithAbility reverseWorm = WormFactory.getReverseWorm(new Vector2(START_POSITIONS.get(2)), Keys.J, Keys.L, Keys.K);
-			reverseWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, true);
+			reverseWorm.setCoolDownBarPos(DIMENSION_X - 10, CENTER.y, true);
 			worms.add(reverseWorm);
 		}
 		if ((selectedWorms & 8) == 8) {
 			WormWithAbility splitterWorm = WormFactory.getSplitterWorm(new Vector2(START_POSITIONS.get(3)), Keys.Z, Keys.C, Keys.X);
-			splitterWorm.setCoolDownBarPos(DIMENSION_X, CENTER.y, false);
+			splitterWorm.setCoolDownBarPos(DIMENSION_X - 10, CENTER.y, false);
 			worms.add(splitterWorm);
 		}
 
@@ -92,13 +91,13 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		turnWorms(keycode, true);
+		handdleImput(keycode, true);
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		turnWorms(keycode, false);
+		handdleImput(keycode, false);
 		return false;
 	}
 
@@ -217,8 +216,16 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		dispose();
 	}
 
-	private void turnWorms(int keycode, boolean startEnd) {
+	private void handdleImput(int keycode, boolean startEnd) {
 		for (Worm worm : worms) {
+			if (startEnd && worm instanceof WormWithAbility) {
+				WormWithAbility wormWithAbility = (WormWithAbility) worm;
+				if (keycode == wormWithAbility.getInputKeyExecute()) {
+					wormWithAbility.execute();
+					break;
+				}
+			}
+
 			if (keycode == worm.getInputKeyLeft()) {
 				worm.turnLeft(startEnd);
 				break;
@@ -226,14 +233,6 @@ public class WormsScene extends BaseScreen<WormsGame> {
 			if (keycode == worm.getInputKeyRight()) {
 				worm.turnRight(startEnd);
 				break;
-			}
-
-			if (startEnd && worm instanceof WormWithAbility) {
-				WormWithAbility wormWithAbility = (WormWithAbility) worm;
-				if (keycode == wormWithAbility.getInputKeyExecute()) {
-					wormWithAbility.execute();
-					break;
-				}
 			}
 		}
 
