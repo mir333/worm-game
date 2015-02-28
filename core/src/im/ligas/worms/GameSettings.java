@@ -17,7 +17,7 @@ package im.ligas.worms;
  * @author Miroslav Ligas
  */
 public class GameSettings {
-	private int selectedWorms = 0;
+	private int selectedWorms = 3;
 	private boolean specialAbilityEnabled = true;
 	private boolean sound = true;
 	private boolean music = true;

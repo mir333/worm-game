@@ -88,8 +88,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 
 		touchPosition = new Vector3();
 
-		players[2].setColor(1, 1, 1, 0.2f);
-		players[3].setColor(1, 1, 1, 0.2f);
+		loadSettings(game);
 	}
 
 	@Override
@@ -116,14 +115,9 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 			selectSprite(controls[2]);
 			game.gameSettings.setSpecialAbilityEnabled(!game.gameSettings.isSpecialAbilityEnabled());
 		} else if (spriteContains(controls[3], unprojectPosition)) {
-			help = controls[3];
-			controls[3] = controls[5];
-			controls[5] = help;
 			stopPlayMusic();
 		} else if (spriteContains(controls[4], unprojectPosition)) {
-			help = controls[4];
-			controls[4] = controls[6];
-			controls[6] = help;
+			switchControlSprites(6, 4);
 			game.gameSettings.setSound(!game.gameSettings.isSound());
 		}
 
@@ -153,7 +147,9 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 
 	@Override
 	public void show() {
-		music.play();
+		if (game.gameSettings.isMusic()) {
+			music.play();
+		}
 		super.show();
 	}
 
@@ -191,6 +187,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 	}
 
 	private void stopPlayMusic() {
+		switchControlSprites(5, 3);
 		if (game.gameSettings.isMusic()) {
 			game.gameSettings.setMusic(false);
 			music.stop();
@@ -205,4 +202,37 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 		Rectangle boundingRectangle = sprite.getBoundingRectangle();
 		return boundingRectangle.contains(position.x, position.y);
 	}
+
+	private void loadSettings(WormsGame game) {
+		int selectedWorms = ~game.gameSettings.getSelectedWorms();
+		if ((selectedWorms & 1) == 1) {
+			players[0].setColor(1, 1, 1, 0.2f);
+		}
+		if ((selectedWorms & 2) == 2) {
+			players[1].setColor(1, 1, 1, 0.2f);
+		}
+		if ((selectedWorms & 4) == 4) {
+			players[2].setColor(1, 1, 1, 0.2f);
+		}
+		if ((selectedWorms & 8) == 8) {
+			players[3].setColor(1, 1, 1, 0.2f);
+		}
+
+		if (!game.gameSettings.isMusic()) {
+			switchControlSprites(5, 3);
+		}
+		if (!game.gameSettings.isSound()) {
+			switchControlSprites(6, 4);;
+		}
+		if (!game.gameSettings.isSpecialAbilityEnabled()) {
+			selectSprite(controls[2]);
+		}
+	}
+
+	private void switchControlSprites(int from, int to) {
+		help = controls[to];
+		controls[to] = controls[from];
+		controls[from] = help;
+	}
+
 }
