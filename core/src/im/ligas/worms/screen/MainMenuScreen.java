@@ -46,7 +46,7 @@ public class MainMenuScreen extends BaseScreen<WormsGame> {
 	public MainMenuScreen(final WormsGame game) {
 		super(game);
 
-		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("menu.mp3"));
 		music.setLooping(true);
 
 		menuTexture = new Texture(Gdx.files.internal("menu.png"));
