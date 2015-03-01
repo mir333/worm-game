@@ -19,6 +19,7 @@
 package im.ligas.worms.worm;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -32,9 +33,7 @@ public interface Worm {
 
 	int getInputKeyRight();
 
-	Vector2 getHead();
-
-	Array<Float> getBody();
+	Array<Shape2D> getObstacles();
 
 	void turnLeft(boolean start);
 
@@ -42,7 +41,7 @@ public interface Worm {
 
 	void grow(float factor);
 
-	void setDead(boolean dead);
+	boolean calculateDead(Array<Array<Shape2D>> objects);
 
 	boolean isDead();
 

@@ -23,10 +23,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import im.ligas.worms.WormsGame;
-import im.ligas.worms.util.Utils;
 import im.ligas.worms.worm.Worm;
 import im.ligas.worms.worm.WormFactory;
 import im.ligas.worms.worm.WormWithAbility;
@@ -117,13 +117,15 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		}
 
 		byte dead = 0;
-		for (int i = 0; i < worms.size; i++) {
-			Worm worm = worms.get(i);
-			if (worm.isDead() ||
-				wallCollision(worm) ||
-				selfCollision(worm) ||
-				opponentCollision(worm, i, worms)
-				) {
+		for (Worm worm : worms) {
+			Array<Array<Shape2D>> obstacles = new Array<Array<Shape2D>>(worms.size);
+			for (int i = 0; i < worms.size; i++) {
+				if (!worm.equals(worms.get(i))) {
+					obstacles.add(worms.get(i).getObstacles());
+				}
+			}
+
+			if (worm.calculateDead(obstacles)) {
 				dead++;
 			}
 		}
@@ -165,33 +167,6 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		for (Worm worm : worms) {
 			worm.dispose();
 		}
-	}
-
-
-	private boolean opponentCollision(Worm worm, int currentWorm, Array<Worm> worms) {
-		boolean dead = false;
-		for (int i = 0; i < worms.size; i++) {
-			if (i != currentWorm) {
-				Array<Float> opponentBody = worms.get(i).getBody();
-				dead = Utils.checkOpponentCollisions(worm.getHead(), opponentBody);
-			}
-			if (dead) {
-				worm.setDead(dead);
-				break;
-			}
-		}
-		return worm.isDead();
-	}
-
-	private boolean selfCollision(Worm worm) {
-		worm.setDead(Utils.checkSelfCollisions(worm.getHead(), worm.getBody()));
-		return worm.isDead();
-	}
-
-	private boolean wallCollision(Worm worm) {
-		Vector2 head = worm.getHead();
-		worm.setDead(head.x < 0 || head.x > DIMENSION_X || head.y < 0 || head.y > DIMENSION_Y);
-		return worm.isDead();
 	}
 
 	private void printDebugData(Array<Worm> worms) {

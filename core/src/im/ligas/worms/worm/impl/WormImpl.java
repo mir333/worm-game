@@ -18,15 +18,20 @@
 
 package im.ligas.worms.worm.impl;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import im.ligas.worms.WormsConstants;
 import im.ligas.worms.util.Utils;
 import im.ligas.worms.worm.Worm;
+
+import static im.ligas.worms.WormsConstants.DIMENSION_X;
+import static im.ligas.worms.WormsConstants.DIMENSION_Y;
 
 /**
  * Created by ligasm on 2/8/15.
@@ -72,13 +77,10 @@ public class WormImpl implements Worm {
 	}
 
 	@Override
-	public Vector2 getHead() {
-		return head;
-	}
-
-	@Override
-	public Array<Float> getBody() {
-		return body;
+	public Array<Shape2D> getObstacles() {
+		Array<Shape2D> shape2Ds = new Array<Shape2D>();
+		shape2Ds.add(new Polyline(Utils.convertToPrimitive(body)));
+		return shape2Ds;
 	}
 
 	@Override
@@ -124,15 +126,15 @@ public class WormImpl implements Worm {
 	}
 
 	@Override
-	public void setDead(boolean dead) {
-		if (!this.dead) {
-			this.dead = dead;
-		}
+	public boolean isDead() {
+		return dead;
 	}
 
 	@Override
-	public boolean isDead() {
-		return dead;
+	public boolean calculateDead(Array<Array<Shape2D>> objects) {
+		return dead || wallCollision() ||
+			selfCollision() ||
+			objectCollision(objects);
 	}
 
 	@Override
@@ -158,7 +160,53 @@ public class WormImpl implements Worm {
 
 
 	@Override
-	public void dispose() {}
+	public void dispose() {
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		WormImpl worm = (WormImpl) o;
+		return id == worm.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
+
+	private boolean objectCollision(Array<Array<Shape2D>> arrays) {
+		for (Array<Shape2D> objects : arrays) {
+			for (Shape2D object : objects) {
+				if(object instanceof Circle){
+					Circle circle = (Circle) object;
+					if(circle.contains(head)){
+						return (dead = true);
+					}
+				}else if(object instanceof Polyline){
+					Polyline polyline = (Polyline) object;
+					if (Utils.checkOpponentCollisions(head, polyline.getVertices())) {
+						return (dead = true);
+					}
+
+				}
+			}
+		}
+
+		return dead;
+	}
+
+	private boolean selfCollision() {
+		dead = Utils.checkSelfCollisions(head, body);
+		return dead;
+	}
+
+	private boolean wallCollision() {
+		dead = head.x < 0 || head.x > DIMENSION_X || head.y < 0 || head.y > DIMENSION_Y;
+		return dead;
+	}
 
 	protected class Heading {
 		int angle;

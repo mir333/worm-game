@@ -17,21 +17,100 @@
  */
 package im.ligas.worms.worm.impl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
+import static im.ligas.worms.WormsConstants.DIMENSION_X;
+import static im.ligas.worms.WormsConstants.DIMENSION_Y;
 
 /**
  * @author Miroslav Ligas
  */
 public class SniperWormImpl extends BaseWormWithAbilityImpl {
 
+	private final Sound sound;
+	private Projectile projectile;
 
 	public SniperWormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight, int keyExecute) {
 		super(start, color, id, keyLeft, keyRight, keyExecute);
+
+		this.sound = Gdx.audio.newSound(Gdx.files.internal("shoot.wav"));
+
+		projectile = new Projectile();
 	}
 
 	@Override
 	public void execute() {
+		if (projectile.ready) {
+			projectile.shoot(heading.angle);
+			sound.play();
+		}
+	}
 
+	@Override
+	public void grow(float factor) {
+		super.grow(factor);
+
+		projectile.move(factor);
+
+	}
+
+	@Override
+	public Array<Shape2D> getObstacles() {
+		final Array<Shape2D> obsticles = super.getObstacles();
+		obsticles.add(projectile.bullet);
+		return obsticles;
+	}
+
+	@Override
+	public void draw(ShapeRenderer shapeRenderer) {
+		super.draw(shapeRenderer);
+
+		if (!projectile.ready) {
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			shapeRenderer.circle(projectile.bullet.x, projectile.bullet.y, projectile.bullet.radius);
+			shapeRenderer.end();
+		}
+	}
+
+	@Override
+	public void dispose() {
+		sound.dispose();
+	}
+
+	private class Projectile {
+		private int direction;
+		private Circle bullet;
+		private boolean ready;
+
+		public Projectile() {
+			this.bullet = new Circle();
+			this.bullet.radius = 10;
+			this.ready = true;
+		}
+
+		public void shoot(int direction) {
+			this.bullet.setPosition(new Vector2(head));
+			this.direction = direction;
+			this.ready = false;
+		}
+
+		public void move(float factor) {
+			if (!this.ready) {
+				if (bullet.x > 0 && bullet.x < DIMENSION_X && bullet.y > 0 && bullet.y < DIMENSION_Y) {
+					bullet.x += (MathUtils.cosDeg(direction) * factor * 5);
+					bullet.y += (MathUtils.sinDeg(direction) * factor * 5);
+				} else {
+					this.ready = true;
+				}
+			}
+		}
 	}
 }

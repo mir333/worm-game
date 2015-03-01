@@ -49,27 +49,33 @@ public class Utils {
 	}
 
 	public static boolean checkSelfCollisions(Vector2 head, Array<Float> line) {
-		return checkCollision(head, line, true);
+		float [] primLine = convertToPrimitive(line);
+		return checkCollision(head, primLine, true);
 	}
 
 	public static boolean checkOpponentCollisions(Vector2 head, Array<Float> line) {
+		float [] primLine = convertToPrimitive(line);
+		return checkCollision(head, primLine, false);
+	}
+
+	public static boolean checkOpponentCollisions(Vector2 head, float[] line) {
 		return checkCollision(head, line, false);
 	}
 
-	private static boolean checkCollision(Vector2 head, Array<Float> line, boolean self) {
+	private static boolean checkCollision(Vector2 head, float[] line, boolean self) {
 		Vector2 start = new Vector2();
 		Vector2 end = new Vector2();
-		int upperBoundary = line.size - 2;
+		int upperBoundary = line.length - 2;
 
 		if (self) {
 			upperBoundary -= 10;
 		}
 
 		for (int i = 0; i < upperBoundary; i += 2) {
-			start.x = line.get(i);
-			start.y = line.get(i + 1);
-			end.x = line.get(i + 2);
-			end.y = line.get(i + 3);
+			start.x = line[i];
+			start.y = line[i + 1];
+			end.x = line[i + 2];
+			end.y = line[i + 3];
 
 			if (Intersector.distanceSegmentPoint(start, end, head) < WormsConstants.COLLISION_DISTANCE) {
 				return true;
