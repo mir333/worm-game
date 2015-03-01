@@ -91,13 +91,13 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		handdleImput(keycode, true);
+		handleInput(keycode, true);
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		handdleImput(keycode, false);
+		handleInput(keycode, false);
 		return false;
 	}
 
@@ -194,7 +194,7 @@ public class WormsScene extends BaseScreen<WormsGame> {
 		dispose();
 	}
 
-	private void handdleImput(int keycode, boolean startEnd) {
+	private void handleInput(int keycode, boolean startEnd) {
 		for (Worm worm : worms) {
 			if (startEnd && worm instanceof WormWithAbility) {
 				WormWithAbility wormWithAbility = (WormWithAbility) worm;

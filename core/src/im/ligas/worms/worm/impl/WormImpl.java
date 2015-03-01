@@ -20,7 +20,6 @@ package im.ligas.worms.worm.impl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Shape2D;
@@ -30,9 +29,6 @@ import im.ligas.worms.WormsConstants;
 import im.ligas.worms.util.Utils;
 import im.ligas.worms.worm.Worm;
 
-import static im.ligas.worms.WormsConstants.DIMENSION_X;
-import static im.ligas.worms.WormsConstants.DIMENSION_Y;
-
 /**
  * Created by ligasm on 2/8/15.
  */
@@ -41,10 +37,10 @@ public class WormImpl implements Worm {
 	protected Vector2 head;
 	protected Array<Float> body;
 	protected Heading heading;
+	protected boolean dead = false;
 
 	private int inputKeyLeft;
 	private int inputKeyRight;
-	private boolean dead = false;
 	private Color color;
 
 	public WormImpl(Vector2 start, Color color, byte id, int keyLeft, int keyRight) {
@@ -132,9 +128,10 @@ public class WormImpl implements Worm {
 
 	@Override
 	public boolean calculateDead(Array<Array<Shape2D>> objects) {
-		return dead || wallCollision() ||
-			selfCollision() ||
-			objectCollision(objects);
+		return dead = dead ||
+			Utils.wallCollision(head) ||
+			Utils.checkSelfCollisions(head, body) ||
+			Utils.objectCollisions(head, objects);
 	}
 
 	@Override
@@ -174,38 +171,6 @@ public class WormImpl implements Worm {
 	@Override
 	public int hashCode() {
 		return id;
-	}
-
-
-	private boolean objectCollision(Array<Array<Shape2D>> arrays) {
-		for (Array<Shape2D> objects : arrays) {
-			for (Shape2D object : objects) {
-				if(object instanceof Circle){
-					Circle circle = (Circle) object;
-					if(circle.contains(head)){
-						return (dead = true);
-					}
-				}else if(object instanceof Polyline){
-					Polyline polyline = (Polyline) object;
-					if (Utils.checkOpponentCollisions(head, polyline.getVertices())) {
-						return (dead = true);
-					}
-
-				}
-			}
-		}
-
-		return dead;
-	}
-
-	private boolean selfCollision() {
-		dead = Utils.checkSelfCollisions(head, body);
-		return dead;
-	}
-
-	private boolean wallCollision() {
-		dead = head.x < 0 || head.x > DIMENSION_X || head.y < 0 || head.y > DIMENSION_Y;
-		return dead;
 	}
 
 	protected class Heading {
