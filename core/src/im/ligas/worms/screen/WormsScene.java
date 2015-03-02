@@ -196,7 +196,8 @@ public class WormsScene extends BaseScreen<WormsGame> {
 
 	private void handleInput(int keycode, boolean startEnd) {
 		for (Worm worm : worms) {
-			if (startEnd && worm instanceof WormWithAbility) {
+			if (game.gameSettings.isSpecialAbilityEnabled() &&
+				startEnd && worm instanceof WormWithAbility) {
 				WormWithAbility wormWithAbility = (WormWithAbility) worm;
 				if (keycode == wormWithAbility.getInputKeyExecute()) {
 					wormWithAbility.execute();
