@@ -46,28 +46,8 @@ public class Utils {
 		return degrees;
 	}
 
-	public static boolean wallCollision(Vector2 vector){
+	public static boolean wallCollision(Vector2 vector) {
 		return vector.x < 0 || vector.x > DIMENSION_X || vector.y < 0 || vector.y > DIMENSION_Y;
-	}
-
-	public static boolean objectCollisions(Vector2 vector,Array<Array<Shape2D>> arrays) {
-		for (Array<Shape2D> objects : arrays) {
-			for (Shape2D object : objects) {
-				if(object instanceof Circle){
-					Circle circle = (Circle) object;
-					if(circle.contains(vector)){
-						return true;
-					}
-				}else if(object instanceof Polyline){
-					Polyline polyline = (Polyline) object;
-					if (Utils.checkOpponentCollisions(vector, polyline.getVertices())) {
-						return true;
-					}
-
-				}
-			}
-		}
-		return false;
 	}
 
 	public static float[] convertToPrimitive(Array<Float> array) {
@@ -79,17 +59,57 @@ public class Utils {
 	}
 
 	public static boolean checkSelfCollisions(Vector2 vector, Array<Float> line) {
-		float [] primLine = convertToPrimitive(line);
+		float[] primLine = convertToPrimitive(line);
 		return checkCollision(vector, primLine, true);
 	}
 
-	public static boolean checkOpponentCollisions(Vector2 head, Array<Float> line) {
-		float [] primLine = convertToPrimitive(line);
-		return checkCollision(head, primLine, false);
+	public static boolean checkSelfCollisions(Vector2 start, Vector2 end, Array<Float> line) {
+		float[] primLine = convertToPrimitive(line);
+		return checkCollision(start, end, primLine, true, null);
 	}
 
-	public static boolean checkOpponentCollisions(Vector2 head, float[] line) {
-		return checkCollision(head, line, false);
+	public static boolean objectCollisions(Vector2 vector, Array<Array<Shape2D>> arrays) {
+		for (Array<Shape2D> objects : arrays) {
+			for (Shape2D object : objects) {
+				if (object instanceof Circle) {
+					Circle circle = (Circle) object;
+					if (circle.contains(vector)) {
+						return true;
+					}
+				} else if (object instanceof Polyline) {
+					Polyline polyline = (Polyline) object;
+					if (checkCollision(vector, polyline.getVertices(), false)) {
+						return true;
+					}
+
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean objectCollisions(Vector2 start, Vector2 end, Array<Array<Shape2D>> arrays, Vector2 intersection) {
+		Vector2 help = new Vector2();
+		for (Array<Shape2D> objects : arrays) {
+			for (Shape2D object : objects) {
+				if (object instanceof Circle) {
+					Circle circle = (Circle) object;
+					help.x = circle.x;
+					help.y = circle.y;
+					if (Intersector.intersectSegmentCircle(start, end, help, circle.radius)) {
+						Intersector.nearestSegmentPoint(start, end, help, intersection);
+						return true;
+					}
+				} else if (object instanceof Polyline) {
+					Polyline polyline = (Polyline) object;
+					if (checkCollision(start, end, polyline.getVertices(), false, intersection)) {
+						return true;
+					}
+
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean checkCollision(Vector2 head, float[] line, boolean self) {
@@ -108,6 +128,30 @@ public class Utils {
 			end.y = line[i + 3];
 
 			if (Intersector.distanceSegmentPoint(start, end, head) < WormsConstants.COLLISION_DISTANCE) {
+				return true;
+			}
+
+
+		}
+		return false;
+	}
+
+	private static boolean checkCollision(Vector2 segmentStart, Vector2 segmentEnd, float[] line, boolean self, Vector2 intersection) {
+		Vector2 start = new Vector2();
+		Vector2 end = new Vector2();
+		int upperBoundary = line.length - 2;
+
+		if (self) {
+			upperBoundary -= 10;
+		}
+
+		for (int i = 0; i < upperBoundary; i += 2) {
+			start.x = line[i];
+			start.y = line[i + 1];
+			end.x = line[i + 2];
+			end.y = line[i + 3];
+
+			if (Intersector.intersectSegments(start, end, segmentStart, segmentEnd, intersection)) {
 				return true;
 			}
 
